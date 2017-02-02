@@ -26,7 +26,7 @@ public class ResourceUnifier
 
                 ArrayList<ItemStack> entries = OreDictionary.getOres(name);
 
-                this.preferences.put(oreId, entries.get(1));
+                this.preferences.put(oreId, entries.get(0));
             }
         }
     }

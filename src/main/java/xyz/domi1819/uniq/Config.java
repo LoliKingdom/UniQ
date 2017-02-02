@@ -23,7 +23,10 @@ public class Config
         this.unificationTargets = this.config.getStringList("unificationTargets", "settings", new String[]{"Copper", "Iron"}, "");
         this.unificationPrefixes = this.config.getStringList("unificationPrefixes", "settings", new String[]{"ingot", "dust", "nugget"}, "");
 
-        this.config.save();
+        if (this.config.hasChanged())
+        {
+            this.config.save();
+        }
 
         return this;
     }

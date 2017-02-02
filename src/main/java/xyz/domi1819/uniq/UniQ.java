@@ -57,7 +57,7 @@ public class UniQ
             catch (Exception ex)
             {
                 this.logger.error("Tweaker " + tweaker.getName() + " threw an exception while running:");
-                this.logger.error(ex.getMessage());
+                this.logger.error(ex);
             }
         }
     }

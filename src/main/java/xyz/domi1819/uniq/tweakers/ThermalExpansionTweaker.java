@@ -1,13 +1,13 @@
 package xyz.domi1819.uniq.tweakers;
 
 import net.minecraft.item.ItemStack;
-import xyz.domi1819.uniq.ITweaker;
+import xyz.domi1819.uniq.tweaker.IGeneralTweaker;
 import xyz.domi1819.uniq.ResourceUnifier;
 
 import java.lang.reflect.Field;
 import java.util.Map;
 
-public class ThermalExpansionTweaker implements ITweaker
+public class ThermalExpansionTweaker implements IGeneralTweaker
 {
     @Override
     public String getName()

@@ -11,7 +11,7 @@ public class ResourceUnifier
 {
     private HashMap<Integer, ItemStack> preferences = new HashMap<>();
 
-    public void build(Config config)
+    public ResourceUnifier build(Config config)
     {
         HashMap<String, Integer> modPriorities = new HashMap<>();
         String[] unificationPriorities = config.unificationPriorities;
@@ -53,6 +53,8 @@ public class ResourceUnifier
                 this.preferences.put(oreId, bestItemStack);
             }
         }
+
+        return this;
     }
 
     public ItemStack getPreferredStack(ItemStack stack)

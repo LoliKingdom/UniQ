@@ -1,7 +1,7 @@
 package xyz.domi1819.uniq.tweakers;
 
 import net.minecraft.item.ItemStack;
-import xyz.domi1819.uniq.ITweaker;
+import xyz.domi1819.uniq.tweaker.IGeneralTweaker;
 import xyz.domi1819.uniq.ResourceUnifier;
 
 import java.lang.reflect.Field;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("unchecked")
-public class IndustrialCraftTweaker implements ITweaker
+public class IndustrialCraftTweaker implements IGeneralTweaker
 {
     @Override
     public String getName()

@@ -4,16 +4,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
-import xyz.domi1819.uniq.ITweaker;
 import xyz.domi1819.uniq.ResourceUnifier;
+import xyz.domi1819.uniq.tweaker.IGeneralTweaker;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("unchecked")
-public class MinecraftTweaker implements ITweaker
+public class MinecraftTweaker implements IGeneralTweaker
 {
     @Override
     public String getName()
@@ -24,25 +24,19 @@ public class MinecraftTweaker implements ITweaker
     @Override
     public String getModId()
     {
-        return null;
+        return "";
     }
 
     @Override
     public void run(ResourceUnifier unifier) throws Exception
     {
-        this.processCraftingRecipes(unifier);
         this.processFurnaceRecipes(unifier);
         this.processChestGen(unifier);
     }
 
-    private void processCraftingRecipes(ResourceUnifier unifier)
-    {
-
-    }
-
     private void processFurnaceRecipes(ResourceUnifier unifier)
     {
-        HashMap<ItemStack, ItemStack> recipes = (HashMap<ItemStack, ItemStack>)FurnaceRecipes.smelting().getSmeltingList();
+        HashMap<ItemStack, ItemStack> recipes = (HashMap<ItemStack, ItemStack>) FurnaceRecipes.smelting().getSmeltingList();
 
         for (Map.Entry<ItemStack, ItemStack> entry : recipes.entrySet())
         {

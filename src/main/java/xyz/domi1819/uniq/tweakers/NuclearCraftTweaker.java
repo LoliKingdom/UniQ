@@ -25,32 +25,37 @@ public class NuclearCraftTweaker implements ITweaker
     @Override
     public void run(ResourceUnifier unifier) throws Exception
     {
-        this.processCrusherRecipes(unifier);
+        Field fRecipeList = Class.forName("nc.crafting.NCRecipeHelper").getDeclaredField("recipeList");
+
+        fRecipeList.setAccessible(true);
+
+        this.processRecipes(unifier, "nc.crafting.machine.CrusherRecipes", fRecipeList);
+        this.processRecipes(unifier, "nc.crafting.machine.HastenerRecipes", fRecipeList);
+        this.processRecipes(unifier, "nc.crafting.machine.FactoryRecipes", fRecipeList);
+
         this.processOldCrusherRecipes(unifier);
     }
 
-    private void processCrusherRecipes(ResourceUnifier unifier) throws Exception
+    private void processRecipes(ResourceUnifier unifier, String className, Field fRecipeList) throws Exception
     {
-        Field inst = Class.forName("nc.crafting.machine.CrusherRecipes").getDeclaredField("recipes");
-        Field recipes = Class.forName("nc.crafting.NCRecipeHelper").getDeclaredField("recipeList");
+        Field fRecipes = Class.forName(className).getDeclaredField("recipes");
 
-        inst.setAccessible(true);
-        recipes.setAccessible(true);
+        fRecipes.setAccessible(true);
 
-        ((Map<Object[], Object[]>) recipes.get(inst.get(null))).values().forEach(unifier::setPreferredStacksObj);
+        ((Map<Object[], Object[]>) fRecipeList.get(fRecipes.get(null))).values().forEach(unifier::setPreferredStacksObj);
     }
 
     private void processOldCrusherRecipes(ResourceUnifier unifier) throws Exception
     {
-        Class clazz = Class.forName("nc.crafting.machine.CrusherRecipesOld");
+        Class cCrusherRecipes = Class.forName("nc.crafting.machine.CrusherRecipesOld");
 
-        Field inst = clazz.getDeclaredField("smeltingBase");
-        Field fRecipes = clazz.getDeclaredField("smeltingList");
+        Field fSmeltingBase = cCrusherRecipes.getDeclaredField("smeltingBase");
+        Field fSmeltingList = cCrusherRecipes.getDeclaredField("smeltingList");
 
-        inst.setAccessible(true);
-        fRecipes.setAccessible(true);
+        fSmeltingBase.setAccessible(true);
+        fSmeltingList.setAccessible(true);
 
-        Map<ItemStack, ItemStack> recipes = (Map<ItemStack, ItemStack>)fRecipes.get(inst.get(null));
+        Map<ItemStack, ItemStack> recipes = (Map<ItemStack, ItemStack>)fSmeltingList.get(fSmeltingBase.get(null));
 
         for (Map.Entry<ItemStack, ItemStack> entry : recipes.entrySet())
         {

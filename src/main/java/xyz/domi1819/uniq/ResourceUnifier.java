@@ -1,5 +1,7 @@
 package xyz.domi1819.uniq;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -11,6 +13,14 @@ public class ResourceUnifier
 
     public void build(Config config)
     {
+        HashMap<String, Integer> modPriorities = new HashMap<>();
+        String[] unificationPriorities = config.unificationPriorities;
+
+        for (int i = 0; i < unificationPriorities.length; i++)
+        {
+            modPriorities.put(unificationPriorities[i], i);
+        }
+
         for (String prefix : config.unificationPrefixes)
         {
             for (String target : config.unificationTargets)
@@ -26,7 +36,21 @@ public class ResourceUnifier
 
                 ArrayList<ItemStack> entries = OreDictionary.getOres(name);
 
-                this.preferences.put(oreId, entries.get(0));
+                int bestPriority = Integer.MAX_VALUE;
+                ItemStack bestItemStack = null;
+
+                for (ItemStack stack : entries)
+                {
+                    int priority = modPriorities.getOrDefault(this.getModId(stack), Integer.MAX_VALUE - 1);
+
+                    if (priority < bestPriority)
+                    {
+                        bestItemStack = stack;
+                        bestPriority = priority;
+                    }
+                }
+
+                this.preferences.put(oreId, bestItemStack);
             }
         }
     }
@@ -58,5 +82,25 @@ public class ResourceUnifier
         {
             objects[i] = this.getPreferredStack((ItemStack)objects[i]);
         }
+    }
+
+    public void setPreferredStacks(List<ItemStack> stacks)
+    {
+        for (int i = 0; i < stacks.size(); i++)
+        {
+            stacks.set(i, this.getPreferredStack(stacks.get(i)));
+        }
+    }
+
+    private String getModId(ItemStack stack)
+    {
+        String modId = GameRegistry.findUniqueIdentifierFor(stack.getItem()).modId;
+
+        if (modId.equals(""))
+        {
+            return "minecraft";
+        }
+
+        return modId;
     }
 }

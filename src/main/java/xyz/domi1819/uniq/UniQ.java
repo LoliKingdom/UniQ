@@ -6,8 +6,11 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Marker;
+import xyz.domi1819.uniq.tweakers.IndustrialCraftTweaker;
 import xyz.domi1819.uniq.tweakers.MinecraftTweaker;
 import xyz.domi1819.uniq.tweakers.NuclearCraftTweaker;
+import xyz.domi1819.uniq.tweakers.ThermalExpansionTweaker;
 
 import java.util.ArrayList;
 
@@ -32,6 +35,8 @@ public class UniQ
     {
         this.registerTweaker(new NuclearCraftTweaker());
         this.registerTweaker(new MinecraftTweaker());
+        this.registerTweaker(new IndustrialCraftTweaker());
+        this.registerTweaker(new ThermalExpansionTweaker());
     }
 
     @Mod.EventHandler
@@ -39,7 +44,11 @@ public class UniQ
     {
         ResourceUnifier unifier = new ResourceUnifier();
 
+        this.logger.info("Building target list...");
+
         unifier.build(this.config);
+
+        this.logger.info("Running tweakers...");
 
         for (ITweaker tweaker : this.tweakers)
         {
@@ -56,10 +65,11 @@ public class UniQ
             }
             catch (Exception ex)
             {
-                this.logger.error("Tweaker " + tweaker.getName() + " threw an exception while running:");
-                this.logger.error(ex);
+                this.logger.error("Tweaker " + tweaker.getName() + " threw an exception while running:", ex);
             }
         }
+
+        this.logger.info("Done.");
     }
 
     public void registerTweaker(ITweaker tweaker)

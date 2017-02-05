@@ -7,7 +7,6 @@ import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Logger;
 import xyz.domi1819.uniq.tweaker.ICraftingTweaker;
 import xyz.domi1819.uniq.tweaker.IGeneralTweaker;
@@ -20,6 +19,9 @@ import java.util.*;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class UniQ
 {
+    @Mod.Instance("uniq")
+    public static UniQ instance;
+
     public Logger logger;
     public Config config;
 
@@ -36,8 +38,8 @@ public class UniQ
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)
     {
-        this.registerCraftingTweaker(new BasicCraftingTweaker("","recipeOutput"), "net.minecraft.item.crafting.ShapedRecipes");
-        this.registerCraftingTweaker(new BasicCraftingTweaker("","recipeOutput"), "net.minecraft.item.crafting.ShapelessRecipes");
+        this.registerCraftingTweaker(new BasicCraftingTweaker("", "recipeOutput"), "net.minecraft.item.crafting.ShapedRecipes");
+        this.registerCraftingTweaker(new BasicCraftingTweaker("", "recipeOutput"), "net.minecraft.item.crafting.ShapelessRecipes");
         this.registerCraftingTweaker(new BasicCraftingTweaker(""), "net.minecraftforge.oredict.ShapedOreRecipe");
         this.registerCraftingTweaker(new BasicCraftingTweaker(""), "net.minecraftforge.oredict.ShapelessOreRecipe");
         this.registerCraftingTweaker(new BasicCraftingTweaker("IC2"), "ic2.core.AdvRecipe");
@@ -58,6 +60,7 @@ public class UniQ
         this.registerTweaker(new ForestryTweaker());
         this.registerTweaker(new RailcraftTweaker());
         this.registerTweaker(new AppliedEnergisticsTweaker());
+        this.registerTweaker(new TinkersConstructTweaker());
     }
 
     @Mod.EventHandler
@@ -166,7 +169,4 @@ public class UniQ
 
         unknownRecipeClasses.forEach(System.out::println);
     }
-
-    @Mod.Instance("uniq")
-    public static UniQ instance;
 }

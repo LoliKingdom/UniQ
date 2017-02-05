@@ -2,12 +2,13 @@ package xyz.domi1819.uniq.tweakers;
 
 import net.minecraft.item.ItemStack;
 import xyz.domi1819.uniq.Reflect;
-import xyz.domi1819.uniq.tweaker.IGeneralTweaker;
 import xyz.domi1819.uniq.ResourceUnifier;
+import xyz.domi1819.uniq.tweaker.IGeneralTweaker;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("unchecked")
 public class IndustrialCraftTweaker implements IGeneralTweaker

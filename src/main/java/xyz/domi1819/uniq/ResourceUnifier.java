@@ -1,21 +1,26 @@
 package xyz.domi1819.uniq;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class ResourceUnifier
 {
     private HashMap<Integer, ItemStack> preferences = new HashMap<>();
 
+    private NEIHelper neiHelper;
+
     public ResourceUnifier build(Config config)
     {
         HashMap<String, Integer> modPriorities = new HashMap<>();
         String[] unificationPriorities = config.unificationPriorities;
+
+        this.neiHelper = new NEIHelper(config.enableNEIIntegration, this);
 
         for (int i = 0; i < unificationPriorities.length; i++)
         {
@@ -129,8 +134,17 @@ public class ResourceUnifier
 
             if (priority < bestPriority)
             {
+                if (bestItemStack != null)
+                {
+                    this.neiHelper.tryHideItem(bestItemStack);
+                }
+
                 bestItemStack = stack;
                 bestPriority = priority;
+            }
+            else
+            {
+                this.neiHelper.tryHideItem(stack);
             }
         }
 

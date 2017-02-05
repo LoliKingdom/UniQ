@@ -4,5 +4,5 @@ import xyz.domi1819.uniq.ResourceUnifier;
 
 public interface IGeneralTweaker extends IBaseTweaker
 {
-    public void run(ResourceUnifier unifier) throws Exception;
+    void run(ResourceUnifier unifier) throws Exception;
 }

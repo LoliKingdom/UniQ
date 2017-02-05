@@ -1,6 +1,5 @@
 package xyz.domi1819.uniq.tweakers;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import xyz.domi1819.uniq.ResourceUnifier;
 import xyz.domi1819.uniq.tweaker.ICraftingTweaker;

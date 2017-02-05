@@ -1,24 +1,29 @@
-package xyz.domi1819.uniq.tweakers;
+package xyz.domi1819.uniq.tweakers.recipe;
 
 import net.minecraft.item.crafting.IRecipe;
 import xyz.domi1819.uniq.ResourceUnifier;
-import xyz.domi1819.uniq.tweaker.ICraftingTweaker;
+import xyz.domi1819.uniq.tweaker.IRecipeTweaker;
 
 import java.lang.reflect.Field;
 
-public class BasicCraftingTweaker implements ICraftingTweaker
+@SuppressWarnings("unused")
+public class BasicRecipeTweaker implements IRecipeTweaker
 {
     private Field fRecipeOutput;
 
     private String modId = "";
     private String fieldName = "output";
 
-    public BasicCraftingTweaker(String modId)
+    public BasicRecipeTweaker()
+    {
+    }
+
+    public BasicRecipeTweaker(String modId)
     {
         this.modId = modId;
     }
 
-    public BasicCraftingTweaker(String modId, String fieldName)
+    public BasicRecipeTweaker(String modId, String fieldName)
     {
         this.modId = modId;
         this.fieldName = fieldName;

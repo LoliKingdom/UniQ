@@ -12,7 +12,6 @@ import java.util.List;
 public class ResourceUnifier
 {
     private HashMap<Integer, ItemStack> preferences = new HashMap<>();
-
     private NEIHelper neiHelper;
 
     public ResourceUnifier build(Config config)

@@ -29,6 +29,13 @@ minecraft {
     runDir = "eclipse"
 }
 
+jar {
+	manifest {
+        attributes 'FMLCorePlugin': 'xyz.domi1819.uniq.core.UniQoreLoadingPlugin'
+        attributes 'FMLCorePluginContainsFMLMod': 'true'
+    }
+}
+
 dependencies {
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..

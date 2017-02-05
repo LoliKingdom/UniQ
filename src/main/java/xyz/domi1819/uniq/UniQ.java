@@ -5,14 +5,14 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
 import org.apache.logging.log4j.Logger;
-import xyz.domi1819.uniq.tweaker.ICraftingTweaker;
+import xyz.domi1819.uniq.tweaker.IRecipeTweaker;
 import xyz.domi1819.uniq.tweaker.IGeneralTweaker;
 import xyz.domi1819.uniq.tweakers.*;
+import xyz.domi1819.uniq.tweakers.recipe.BasicRecipeTweaker;
+import xyz.domi1819.uniq.tweakers.recipe.ForestryRecipeTweaker;
+import xyz.domi1819.uniq.tweakers.recipe.MinecraftRecipeTweaker;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
 @Mod(modid = "uniq", dependencies = "after:*")
@@ -25,8 +25,9 @@ public class UniQ
     public Logger logger;
     public Config config;
 
+    public RecipeProcessor recipeProcessor = new RecipeProcessor();
+
     public ArrayList<IGeneralTweaker> tweakers = new ArrayList<>();
-    public HashMap<String, ICraftingTweaker> craftingTweakers = new HashMap<>();
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
@@ -38,17 +39,17 @@ public class UniQ
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)
     {
-        this.registerCraftingTweaker(new BasicCraftingTweaker("", "recipeOutput"), "net.minecraft.item.crafting.ShapedRecipes");
-        this.registerCraftingTweaker(new BasicCraftingTweaker("", "recipeOutput"), "net.minecraft.item.crafting.ShapelessRecipes");
-        this.registerCraftingTweaker(new BasicCraftingTweaker(""), "net.minecraftforge.oredict.ShapedOreRecipe");
-        this.registerCraftingTweaker(new BasicCraftingTweaker(""), "net.minecraftforge.oredict.ShapelessOreRecipe");
-        this.registerCraftingTweaker(new BasicCraftingTweaker("IC2"), "ic2.core.AdvRecipe");
-        this.registerCraftingTweaker(new BasicCraftingTweaker("IC2"), "ic2.core.AdvShapelessRecipe");
-        this.registerCraftingTweaker(new BasicCraftingTweaker("Mekanism"), "mekanism.common.recipe.ShapedMekanismRecipe");
-        this.registerCraftingTweaker(new BasicCraftingTweaker("Mekanism"), "mekanism.common.recipe.ShapelessMekanismRecipe");
-        this.registerCraftingTweaker(new ForestryCraftingTweaker(), "forestry.core.recipes.ShapedRecipeCustom");
-        this.registerCraftingTweaker(new BasicCraftingTweaker("appliedenergistics2"), "appeng.recipes.game.ShapedRecipe");
-        this.registerCraftingTweaker(new BasicCraftingTweaker("appliedenergistics2"), "appeng.recipes.game.ShapelessRecipe");
+        this.registerRecipeTweaker(new MinecraftRecipeTweaker("field_77575_e"), "net.minecraft.item.crafting.ShapedRecipes");
+        this.registerRecipeTweaker(new MinecraftRecipeTweaker("field_77580_a"), "net.minecraft.item.crafting.ShapelessRecipes");
+        this.registerRecipeTweaker(new BasicRecipeTweaker(), "net.minecraftforge.oredict.ShapedOreRecipe");
+        this.registerRecipeTweaker(new BasicRecipeTweaker(), "net.minecraftforge.oredict.ShapelessOreRecipe");
+        this.registerRecipeTweaker(new BasicRecipeTweaker("IC2"), "ic2.core.AdvRecipe");
+        this.registerRecipeTweaker(new BasicRecipeTweaker("IC2"), "ic2.core.AdvShapelessRecipe");
+        this.registerRecipeTweaker(new BasicRecipeTweaker("Mekanism"), "mekanism.common.recipe.ShapedMekanismRecipe");
+        this.registerRecipeTweaker(new BasicRecipeTweaker("Mekanism"), "mekanism.common.recipe.ShapelessMekanismRecipe");
+        this.registerRecipeTweaker(new BasicRecipeTweaker("appliedenergistics2"), "appeng.recipes.game.ShapedRecipe");
+        this.registerRecipeTweaker(new BasicRecipeTweaker("appliedenergistics2"), "appeng.recipes.game.ShapelessRecipe");
+        this.registerRecipeTweaker(new ForestryRecipeTweaker(), "forestry.core.recipes.ShapedRecipeCustom");
 
         this.registerTweaker(new MinecraftTweaker());
         this.registerTweaker(new ThermalExpansionTweaker());
@@ -61,6 +62,8 @@ public class UniQ
         this.registerTweaker(new RailcraftTweaker());
         this.registerTweaker(new AppliedEnergisticsTweaker());
         this.registerTweaker(new TinkersConstructTweaker());
+        this.registerTweaker(new MineFactoryReloadedTweaker());
+        this.registerTweaker(new ExtraUtilitiesTweaker());
     }
 
     @Mod.EventHandler
@@ -70,11 +73,11 @@ public class UniQ
 
         ResourceUnifier unifier = new ResourceUnifier().build(this.config);
 
-        this.logger.info("Running crafting tweakers...");
+        this.logger.info("Setting up recipe tweakers...");
 
-        this.runCraftingTweakers(unifier);
+        this.recipeProcessor.setup();
 
-        this.logger.info("Running other tweakers...");
+        this.logger.info("Running tweakers...");
 
         for (IGeneralTweaker tweaker : this.tweakers)
         {
@@ -91,16 +94,6 @@ public class UniQ
         this.logger.info("Done.");
     }
 
-    public void registerCraftingTweaker(ICraftingTweaker craftingTweaker, String recipeClassName)
-    {
-        String modId = craftingTweaker.getModId();
-
-        if (modId.equals("") || Loader.isModLoaded(modId))
-        {
-            this.craftingTweakers.put(recipeClassName, craftingTweaker);
-        }
-    }
-
     public void registerTweaker(IGeneralTweaker tweaker)
     {
         String modId = tweaker.getModId();
@@ -111,62 +104,8 @@ public class UniQ
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private void runCraftingTweakers(ResourceUnifier unifier)
+    public void registerRecipeTweaker(IRecipeTweaker craftingTweaker, String recipeClassName)
     {
-        Iterator<Map.Entry<String, ICraftingTweaker>> iterator = this.craftingTweakers.entrySet().iterator();
-
-        while (iterator.hasNext())
-        {
-            Map.Entry<String, ICraftingTweaker> entry = iterator.next();
-
-            try
-            {
-                entry.getValue().prepareTransform(entry.getKey());
-            }
-            catch (Exception ex)
-            {
-                this.logger.error("Crafting tweaker " + entry.getValue().getName() + " threw an exception while preparing and was disabled:", ex);
-                iterator.remove();
-            }
-        }
-
-        Set<String> unknownRecipeClasses = new HashSet<>();
-
-        try
-        {
-            Field fRecipes = CraftingManager.class.getDeclaredField("recipes");
-
-            fRecipes.setAccessible(true);
-
-            List<IRecipe> recipes = (List<IRecipe>) fRecipes.get(CraftingManager.getInstance());
-
-            for (IRecipe recipe : recipes)
-            {
-                ICraftingTweaker tweaker = this.craftingTweakers.get(recipe.getClass().getName());
-
-                if (tweaker != null)
-                {
-                    try
-                    {
-                        tweaker.transform(unifier, recipe);
-                    }
-                    catch (Exception ex)
-                    {
-                        this.logger.error("Crafting tweaker " + tweaker.getName() + " threw an exception while transforming:", ex);
-                    }
-                }
-                else
-                {
-                    unknownRecipeClasses.add(recipe.getClass().getName());
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            this.logger.error("Error while setting up crafting tweakers:", ex);
-        }
-
-        unknownRecipeClasses.forEach(System.out::println);
+        this.recipeProcessor.registerRecipeTweaker(craftingTweaker, recipeClassName);
     }
 }

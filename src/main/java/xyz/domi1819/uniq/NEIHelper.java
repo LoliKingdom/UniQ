@@ -1,11 +1,9 @@
 package xyz.domi1819.uniq;
 
-import codechicken.nei.PositionedStack;
 import cpw.mods.fml.common.Loader;
 import net.minecraft.item.ItemStack;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 @SuppressWarnings("WeakerAccess")
 public class NEIHelper
@@ -25,9 +23,9 @@ public class NEIHelper
             catch (Exception ignored)
             {
             }
-
-            unifier = resourceUnifier;
         }
+
+        unifier = resourceUnifier;
     }
 
     public void tryHideItem(ItemStack stack)
@@ -45,17 +43,8 @@ public class NEIHelper
     }
 
     @SuppressWarnings("unused")
-    public static void setPreferredStacks(List boxedStacks)
+    public static ItemStack getPreferredStack(ItemStack stack)
     {
-        if (unifier != null)
-        {
-            for (Object stackObj : boxedStacks)
-            {
-                PositionedStack stack = (PositionedStack)stackObj;
-
-                stack.item = unifier.getPreferredStack(stack.item);
-                unifier.setPreferredStacks(stack.items);
-            }
-        }
+        return unifier.getPreferredStack(stack);
     }
 }

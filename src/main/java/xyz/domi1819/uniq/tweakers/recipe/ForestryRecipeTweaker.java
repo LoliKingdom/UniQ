@@ -1,12 +1,12 @@
-package xyz.domi1819.uniq.tweakers;
+package xyz.domi1819.uniq.tweakers.recipe;
 
 import net.minecraft.item.crafting.IRecipe;
 import xyz.domi1819.uniq.ResourceUnifier;
-import xyz.domi1819.uniq.tweaker.ICraftingTweaker;
+import xyz.domi1819.uniq.tweaker.IRecipeTweaker;
 
 import java.lang.reflect.Field;
 
-public class ForestryCraftingTweaker implements ICraftingTweaker
+public class ForestryRecipeTweaker implements IRecipeTweaker
 {
     private Field fRecipeOutput;
     private Field fRecipeOutput2;

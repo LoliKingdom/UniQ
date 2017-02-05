@@ -6,11 +6,9 @@ import net.minecraft.item.crafting.IRecipe;
 import xyz.domi1819.uniq.Reflect;
 import xyz.domi1819.uniq.ResourceUnifier;
 import xyz.domi1819.uniq.UniQ;
-import xyz.domi1819.uniq.tweaker.ICraftingTweaker;
 import xyz.domi1819.uniq.tweaker.IGeneralTweaker;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +41,7 @@ public class RailcraftTweaker implements IGeneralTweaker
     }
 
     @SuppressWarnings("ConstantConditions")
-    private void processRecipes(ResourceUnifier unifier, String machineName, Class craftingManager, String className, String recipeClassName, boolean simpleRecipe) throws Exception
+    private void processRecipes(ResourceUnifier unifier, String machineName, Class craftingManager, String className, String recipeClassName, boolean singleOutput) throws Exception
     {
         Class cBase = Class.forName(className);
 
@@ -54,7 +52,7 @@ public class RailcraftTweaker implements IGeneralTweaker
 
         Object instance = fInstance.get(null);
 
-        if (simpleRecipe)
+        if (singleOutput)
         {
             Field fOutput = Reflect.getNestedClass(cBase, recipeClassName).getDeclaredField("output");
             fOutput.setAccessible(true);
@@ -98,24 +96,6 @@ public class RailcraftTweaker implements IGeneralTweaker
 
         fRecipes.setAccessible(true);
 
-        HashMap<String, ICraftingTweaker> craftingTweakers = UniQ.instance.craftingTweakers;
-
-        for (Object recipe : (List) fRecipes.get(craftingManager.getDeclaredField("rollingMachine").get(null)))
-        {
-            ICraftingTweaker tweaker = craftingTweakers.get(recipe.getClass().getName());
-
-            if (tweaker == null)
-            {
-                continue;
-            }
-
-            try
-            {
-                tweaker.transform(unifier, (IRecipe) recipe);
-            }
-            catch (Exception ignored)
-            {
-            }
-        }
+        UniQ.instance.recipeProcessor.transform(unifier, (List<IRecipe>) fRecipes.get(craftingManager.getDeclaredField("rollingMachine").get(null)));
     }
 }

@@ -55,7 +55,7 @@ public class NuclearCraftTweaker implements IGeneralTweaker
         fSmeltingBase.setAccessible(true);
         fSmeltingList.setAccessible(true);
 
-        Map<ItemStack, ItemStack> recipes = (Map<ItemStack, ItemStack>)fSmeltingList.get(fSmeltingBase.get(null));
+        Map<ItemStack, ItemStack> recipes = (Map<ItemStack, ItemStack>) fSmeltingList.get(fSmeltingBase.get(null));
 
         for (Map.Entry<ItemStack, ItemStack> entry : recipes.entrySet())
         {

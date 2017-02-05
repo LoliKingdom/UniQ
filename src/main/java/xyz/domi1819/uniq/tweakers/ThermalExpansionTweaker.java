@@ -1,12 +1,13 @@
 package xyz.domi1819.uniq.tweakers;
 
-import net.minecraft.item.ItemStack;
+import xyz.domi1819.uniq.Reflect;
 import xyz.domi1819.uniq.tweaker.IGeneralTweaker;
 import xyz.domi1819.uniq.ResourceUnifier;
 
 import java.lang.reflect.Field;
 import java.util.Map;
 
+@SuppressWarnings("ConstantConditions")
 public class ThermalExpansionTweaker implements IGeneralTweaker
 {
     @Override
@@ -27,39 +28,30 @@ public class ThermalExpansionTweaker implements IGeneralTweaker
         this.processSingleOutputRecipes(unifier, "cofh.thermalexpansion.util.crafting.FurnaceManager", "RecipeFurnace");
         this.processDualOutputRecipes(unifier, "cofh.thermalexpansion.util.crafting.PulverizerManager", "RecipePulverizer");
         this.processDualOutputRecipes(unifier, "cofh.thermalexpansion.util.crafting.SmelterManager", "RecipeSmelter");
+        this.processDualOutputRecipes(unifier, "cofh.thermalexpansion.util.crafting.SawmillManager", "RecipeSawmill");
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void processSingleOutputRecipes(ResourceUnifier unifier, String baseName, String nestedName) throws Exception
     {
         Class cBase = Class.forName(baseName);
 
         Field fRecipeMap = cBase.getDeclaredField("recipeMap");
-        Field fOutput = this.getNestedClass(cBase, nestedName).getDeclaredField("output");
+        Field fOutput = Reflect.getNestedClass(cBase, nestedName).getDeclaredField("output");
 
         fRecipeMap.setAccessible(true);
         fOutput.setAccessible(true);
 
-        Map<?,?> recipeMap = (Map<?,?>)fRecipeMap.get(null);
-
-        ItemStack output;
-        ItemStack replacement;
-
-        for (Map.Entry entry : recipeMap.entrySet())
+        for (Map.Entry entry : ((Map<?, ?>) fRecipeMap.get(null)).entrySet())
         {
-            output = (ItemStack)fOutput.get(entry.getValue());
-            replacement = unifier.getPreferredStack(output);
-
-            if (!output.isItemEqual(replacement))
-            {
-                fOutput.set(entry.getValue(), replacement);
-            }
+            unifier.setPreferredStack(fOutput, entry.getValue());
         }
     }
 
     private void processDualOutputRecipes(ResourceUnifier unifier, String baseName, String nestedName) throws Exception
     {
         Class cBase = Class.forName(baseName);
-        Class cNested = this.getNestedClass(cBase, nestedName);
+        Class cNested = Reflect.getNestedClass(cBase, nestedName);
 
         Field fRecipeMap = cBase.getDeclaredField("recipeMap");
         Field fOutputPrimary = cNested.getDeclaredField("primaryOutput");
@@ -69,43 +61,10 @@ public class ThermalExpansionTweaker implements IGeneralTweaker
         fOutputPrimary.setAccessible(true);
         fOutputSecondary.setAccessible(true);
 
-        Map<?,?> recipeMap = (Map<?,?>)fRecipeMap.get(null);
-
-        ItemStack output;
-        ItemStack replacement;
-
-        for (Map.Entry entry : recipeMap.entrySet())
+        for (Map.Entry entry : ((Map<?, ?>) fRecipeMap.get(null)).entrySet())
         {
-            output = (ItemStack)fOutputPrimary.get(entry.getValue());
-            replacement = unifier.getPreferredStack(output);
-
-            if (!output.isItemEqual(replacement))
-            {
-                fOutputPrimary.set(entry.getValue(), replacement);
-            }
-
-            output = (ItemStack)fOutputSecondary.get(entry.getValue());
-            replacement = unifier.getPreferredStack(output);
-
-            if (output != null && !output.isItemEqual(replacement))
-            {
-                fOutputSecondary.set(entry.getValue(), replacement);
-            }
+            unifier.setPreferredStack(fOutputPrimary, entry.getValue());
+            unifier.setPreferredStack(fOutputSecondary, entry.getValue());
         }
-    }
-
-    private Class getNestedClass(Class mainClass, String simpleName)
-    {
-        Class[] classes = mainClass.getDeclaredClasses();
-
-        for (Class clazz : classes)
-        {
-            if (clazz.getSimpleName().equals(simpleName))
-            {
-                return clazz;
-            }
-        }
-
-        return null;
     }
 }

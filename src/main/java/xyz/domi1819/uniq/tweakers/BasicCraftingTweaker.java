@@ -1,4 +1,4 @@
-package xyz.domi1819.uniq.tweakers.crafting;
+package xyz.domi1819.uniq.tweakers;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -9,32 +9,32 @@ import java.lang.reflect.Field;
 
 public class BasicCraftingTweaker implements ICraftingTweaker
 {
-    Field fRecipeOutput;
+    private Field fRecipeOutput;
 
-    String fieldName;
-    String modId = "";
+    private String modId = "";
+    private String fieldName = "output";
 
-    public BasicCraftingTweaker(String fieldName)
+    public BasicCraftingTweaker(String modId)
     {
-        this.fieldName = fieldName;
+        this.modId = modId;
     }
 
-    public BasicCraftingTweaker(String fieldName, String modId)
+    public BasicCraftingTweaker(String modId, String fieldName)
     {
-        this.fieldName = fieldName;
         this.modId = modId;
+        this.fieldName = fieldName;
     }
 
     @Override
     public String getName()
     {
-        return "Minecraft recipes";
+        return "Basic crafting [" + this.modId + "]";
     }
 
     @Override
     public String getModId()
     {
-        return "";
+        return this.modId;
     }
 
     @Override
@@ -47,12 +47,6 @@ public class BasicCraftingTweaker implements ICraftingTweaker
     @Override
     public void transform(ResourceUnifier unifier, IRecipe recipe) throws Exception
     {
-        ItemStack output = (ItemStack)this.fRecipeOutput.get(recipe);
-        ItemStack replacement = unifier.getPreferredStack(output);
-
-        if (!output.isItemEqual(replacement))
-        {
-            this.fRecipeOutput.set(recipe, replacement);
-        }
+        unifier.setPreferredStack(this.fRecipeOutput, recipe);
     }
 }

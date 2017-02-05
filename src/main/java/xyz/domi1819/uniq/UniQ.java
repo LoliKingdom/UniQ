@@ -7,27 +7,24 @@ import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Logger;
 import xyz.domi1819.uniq.tweaker.ICraftingTweaker;
 import xyz.domi1819.uniq.tweaker.IGeneralTweaker;
-import xyz.domi1819.uniq.tweakers.IndustrialCraftTweaker;
-import xyz.domi1819.uniq.tweakers.MinecraftTweaker;
-import xyz.domi1819.uniq.tweakers.NuclearCraftTweaker;
-import xyz.domi1819.uniq.tweakers.ThermalExpansionTweaker;
-import xyz.domi1819.uniq.tweakers.crafting.BasicCraftingTweaker;
+import xyz.domi1819.uniq.tweakers.*;
 
 import java.lang.reflect.Field;
 import java.util.*;
 
 @Mod(modid = "uniq", dependencies = "after:*")
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class UniQ
 {
     public Logger logger;
+    public Config config;
 
-    private ArrayList<IGeneralTweaker> tweakers = new ArrayList<>();
-    private HashMap<String, ICraftingTweaker> craftingTweakers = new HashMap<>();
-    private Config config;
+    public ArrayList<IGeneralTweaker> tweakers = new ArrayList<>();
+    public HashMap<String, ICraftingTweaker> craftingTweakers = new HashMap<>();
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
@@ -39,17 +36,28 @@ public class UniQ
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)
     {
-        this.registerCraftingTweaker(new BasicCraftingTweaker("recipeOutput"), "net.minecraft.item.crafting.ShapedRecipes");
-        this.registerCraftingTweaker(new BasicCraftingTweaker("recipeOutput"), "net.minecraft.item.crafting.ShapelessRecipes");
-        this.registerCraftingTweaker(new BasicCraftingTweaker("output"), "net.minecraftforge.oredict.ShapedOreRecipe");
-        this.registerCraftingTweaker(new BasicCraftingTweaker("output"), "net.minecraftforge.oredict.ShapelessOreRecipe");
-        this.registerCraftingTweaker(new BasicCraftingTweaker("output", "IC2"), "ic2.core.AdvRecipe");
-        this.registerCraftingTweaker(new BasicCraftingTweaker("output", "IC2"), "ic2.core.AdvShapelessRecipe");
+        this.registerCraftingTweaker(new BasicCraftingTweaker("","recipeOutput"), "net.minecraft.item.crafting.ShapedRecipes");
+        this.registerCraftingTweaker(new BasicCraftingTweaker("","recipeOutput"), "net.minecraft.item.crafting.ShapelessRecipes");
+        this.registerCraftingTweaker(new BasicCraftingTweaker(""), "net.minecraftforge.oredict.ShapedOreRecipe");
+        this.registerCraftingTweaker(new BasicCraftingTweaker(""), "net.minecraftforge.oredict.ShapelessOreRecipe");
+        this.registerCraftingTweaker(new BasicCraftingTweaker("IC2"), "ic2.core.AdvRecipe");
+        this.registerCraftingTweaker(new BasicCraftingTweaker("IC2"), "ic2.core.AdvShapelessRecipe");
+        this.registerCraftingTweaker(new BasicCraftingTweaker("Mekanism"), "mekanism.common.recipe.ShapedMekanismRecipe");
+        this.registerCraftingTweaker(new BasicCraftingTweaker("Mekanism"), "mekanism.common.recipe.ShapelessMekanismRecipe");
+        this.registerCraftingTweaker(new ForestryCraftingTweaker(), "forestry.core.recipes.ShapedRecipeCustom");
+        this.registerCraftingTweaker(new BasicCraftingTweaker("appliedenergistics2"), "appeng.recipes.game.ShapedRecipe");
+        this.registerCraftingTweaker(new BasicCraftingTweaker("appliedenergistics2"), "appeng.recipes.game.ShapelessRecipe");
 
         this.registerTweaker(new MinecraftTweaker());
-        this.registerTweaker(new NuclearCraftTweaker());
-        this.registerTweaker(new IndustrialCraftTweaker());
         this.registerTweaker(new ThermalExpansionTweaker());
+        this.registerTweaker(new IndustrialCraftTweaker());
+        this.registerTweaker(new ImmersiveEngineeringTweaker());
+        this.registerTweaker(new MekanismTweaker());
+        this.registerTweaker(new NuclearCraftTweaker());
+        this.registerTweaker(new EnderIOTweaker());
+        this.registerTweaker(new ForestryTweaker());
+        this.registerTweaker(new RailcraftTweaker());
+        this.registerTweaker(new AppliedEnergisticsTweaker());
     }
 
     @Mod.EventHandler
@@ -159,6 +167,6 @@ public class UniQ
         unknownRecipeClasses.forEach(System.out::println);
     }
 
-    @Mod.Instance
+    @Mod.Instance("uniq")
     public static UniQ instance;
 }

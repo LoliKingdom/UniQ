@@ -6,6 +6,8 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.MinecraftForge;
+import xyz.domi1819.uniq.ForgeEventHandler;
 import xyz.domi1819.uniq.ResourceUnifier;
 import xyz.domi1819.uniq.UniQ;
 import xyz.domi1819.uniq.tweaker.IGeneralTweaker;
@@ -36,6 +38,8 @@ public class MinecraftTweaker implements IGeneralTweaker
         this.processCraftingRecipes(unifier);
         this.processFurnaceRecipes(unifier);
         this.processChestGen(unifier);
+
+        MinecraftForge.EVENT_BUS.register(new ForgeEventHandler(unifier));
     }
 
     private void processCraftingRecipes(ResourceUnifier unifier)

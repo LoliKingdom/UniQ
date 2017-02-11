@@ -64,6 +64,7 @@ public class UniQ
         this.registerTweaker(new TinkersConstructTweaker());
         this.registerTweaker(new MineFactoryReloadedTweaker());
         this.registerTweaker(new ExtraUtilitiesTweaker());
+        this.registerTweaker(new AdvancedSolarPanelsTweaker());
     }
 
     @Mod.EventHandler
@@ -71,7 +72,7 @@ public class UniQ
     {
         this.logger.info("Building target list...");
 
-        ResourceUnifier unifier = new ResourceUnifier().build(this.config);
+        ResourceUnifier unifier = new ResourceUnifier().build(this.config, this.logger);
 
         this.logger.info("Setting up recipe tweakers...");
 

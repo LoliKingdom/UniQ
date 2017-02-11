@@ -3,6 +3,7 @@ package xyz.domi1819.uniq;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -12,9 +13,11 @@ import java.util.List;
 public class ResourceUnifier
 {
     private HashMap<Integer, ItemStack> preferences = new HashMap<>();
+    private HashMap<String, String> overrides = new HashMap<>();
     private NEIHelper neiHelper;
 
-    public ResourceUnifier build(Config config)
+    @SuppressWarnings("WeakerAccess")
+    public ResourceUnifier build(Config config, Logger logger)
     {
         HashMap<String, Integer> modPriorities = new HashMap<>();
         String[] unificationPriorities = config.unificationPriorities;
@@ -24,6 +27,19 @@ public class ResourceUnifier
         for (int i = 0; i < unificationPriorities.length; i++)
         {
             modPriorities.put(unificationPriorities[i], i);
+        }
+
+        for (String line : config.unificationOverrides)
+        {
+            int colonIndex = line.indexOf(":");
+
+            if (colonIndex == -1)
+            {
+                logger.error("Format error in line " + line);
+                continue;
+            }
+
+            this.overrides.put(line.substring(0, colonIndex), line.substring(colonIndex + 1, line.length()));
         }
 
         for (String prefix : config.unificationPrefixes)
@@ -123,13 +139,20 @@ public class ResourceUnifier
         }
 
         ArrayList<ItemStack> entries = OreDictionary.getOres(name);
+        String overrideModId = this.overrides.get(name);
 
         int bestPriority = Integer.MAX_VALUE;
         ItemStack bestItemStack = null;
 
         for (ItemStack stack : entries)
         {
-            int priority = modPriorities.getOrDefault(this.getModId(stack), Integer.MAX_VALUE - 1);
+            String modId = this.getModId(stack);
+            int priority = modPriorities.getOrDefault(modId, Integer.MAX_VALUE - 1);
+
+            if (modId.equals(overrideModId))
+            {
+                priority = Integer.MIN_VALUE;
+            }
 
             if (priority < bestPriority)
             {

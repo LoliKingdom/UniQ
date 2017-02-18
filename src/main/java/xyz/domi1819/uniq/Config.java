@@ -29,13 +29,14 @@ public class Config
     {
         this.config.load();
 
-        this.unificationTargets = this.config.getStringList("unificationTargets", "settings", new String[] {"Iron", "Gold", "Copper", "Tin", "Silver", "Lead", "Nickel", "Platinum", "Bronze", "Invar", "Electrum", "Steel", "Aluminum", "Lithium", "Ruby", "Sapphire", "Amber"}, "");
-        this.unificationPrefixes = this.config.getStringList("unificationPrefixes", "settings", new String[] {"ingot", "block", "ore", "dust", "dustTiny", "plate", "gear", "nugget", "gem"}, "");
-        this.unificationInclusions = this.config.getStringList("unificationInclusions", "settings", new String[] {"dustObsidian", "dustStone", "dustCoal", "dustCharcoal", "dustDiamond", "dustLapis", "dustWood", "dustSalt", "dustPlastic", "sheetPlastic", "blockPlastic", "itemRubber", "fuelCoke", "blockFuelCoke"}, "");
+        Defaults defaults = new Defaults();
 
-        this.unificationPriorities = this.config.getStringList("unificationPriorities", "settings", new String[] {"minecraft", "ThermalFoundation", "Mekanism", "ImmersiveEngineering", "IC2"}, "");
+        this.unificationTargets = this.config.getStringList("unificationTargets", "settings", defaults.targets, "");
+        this.unificationPrefixes = this.config.getStringList("unificationPrefixes", "settings", defaults.prefixes, "");
+        this.unificationInclusions = this.config.getStringList("unificationInclusions", "settings", defaults.inclusions, "");
 
-        this.unificationOverrides = this.config.getStringList("unificationOverrides", "settings", new String[] {"oreAluminum:TConstruct"}, "");
+        this.unificationPriorities = this.config.getStringList("unificationPriorities", "settings", defaults.priorities, "");
+        this.unificationOverrides = this.config.getStringList("unificationOverrides", "settings", defaults.overrides, "");
 
         this.enableNEIIntegration = this.config.getBoolean("enableNEIIntegration", "settings", true, "");
         this.debug = this.config.getBoolean("debug", "settings", false, "");
@@ -46,5 +47,82 @@ public class Config
         }
 
         return this;
+    }
+
+    public static class Defaults
+    {
+        // @formatter:off
+
+        public String[] targets = new String[]
+        {
+            "Aluminum",
+            "Amber",
+            "Bronze",
+            "Copper",
+            "Electrum",
+            "Gold",
+            "Invar",
+            "Iron",
+            "Lead",
+            "Lithium",
+            "Nickel",
+            "Peridot",
+            "Platinum",
+            "Ruby",
+            "Sapphire",
+            "Silver",
+            "Steel",
+            "Tin",
+            "Uranium"
+        };
+
+        public String[] prefixes = new String[]
+        {
+            "block",
+            "dust",
+            "dustTiny",
+            "gear",
+            "gem",
+            "ingot",
+            "nugget",
+            "ore",
+            "plate"
+        };
+
+        public String[] inclusions = new String[]
+        {
+            "blockFuelCoke",
+            "blockPlastic",
+            "dustCharcoal",
+            "dustCoal",
+            "dustDiamond",
+            "dustLapis",
+            "dustObsidian",
+            "dustPlastic",
+            "dustSalt",
+            "dustSaltpeter",
+            "dustStone",
+            "dustSulfur",
+            "dustWood",
+            "fuelCoke",
+            "itemRubber",
+            "sheetPlastic"
+        };
+
+        public String[] priorities = new String[]
+        {
+            "minecraft",
+            "ThermalFoundation",
+            "Mekanism",
+            "ImmersiveEngineering",
+            "IC2"
+        };
+
+        public String[] overrides = new String[]
+        {
+            "oreAluminum:TConstruct"
+        };
+
+        // @formatter:on
     }
 }

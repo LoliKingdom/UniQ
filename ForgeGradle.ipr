@@ -169,6 +169,7 @@
   <component name="ProjectCodeStyleSettingsManager">
     <option name="PER_PROJECT_SETTINGS">
       <value>
+        <option name="FORMATTER_TAGS_ENABLED" value="true" />
         <codeStyleSettings language="JAVA">
           <option name="BRACE_STYLE" value="2" />
           <option name="CLASS_BRACE_STYLE" value="2" />
@@ -181,6 +182,9 @@
           <option name="KEEP_SIMPLE_CLASSES_IN_ONE_LINE" value="true" />
           <option name="ENUM_CONSTANTS_WRAP" value="2" />
           <option name="WRAP_ON_TYPING" value="0" />
+          <indentOptions>
+            <option name="CONTINUATION_INDENT_SIZE" value="0" />
+          </indentOptions>
         </codeStyleSettings>
       </value>
     </option>
@@ -190,6 +194,8 @@
     <dictionary name="Domi">
       <words>
         <w>advsolar</w>
+        <w>apiculture</w>
+        <w>peridot</w>
       </words>
     </dictionary>
   </component>

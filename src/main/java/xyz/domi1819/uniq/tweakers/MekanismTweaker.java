@@ -23,8 +23,8 @@ public class MekanismTweaker implements IGeneralTweaker
         return "Mekanism";
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
+    @SuppressWarnings("ConstantConditions")
     public void run(ResourceUnifier unifier) throws Exception
     {
         Class cRecipe = Reflect.getNestedClass(Class.forName("mekanism.common.recipe.RecipeHandler"), "Recipe");

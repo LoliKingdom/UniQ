@@ -65,6 +65,7 @@ public class UniQ
         this.registerTweaker(new MineFactoryReloadedTweaker());
         this.registerTweaker(new ExtraUtilitiesTweaker());
         this.registerTweaker(new AdvancedSolarPanelsTweaker());
+        this.registerTweaker(new ThaumcraftTweaker());
     }
 
     @Mod.EventHandler

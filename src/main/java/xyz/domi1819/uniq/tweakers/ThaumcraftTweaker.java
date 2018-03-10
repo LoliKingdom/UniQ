@@ -26,7 +26,7 @@ public class ThaumcraftTweaker implements IGeneralTweaker
         Class cCrucibleRecipe = Class.forName("thaumcraft.api.crafting.CrucibleRecipe");
 
         Field fCraftingRecipes = Class.forName("thaumcraft.api.ThaumcraftApi").getDeclaredField("craftingRecipes");
-        Field fRecipeOutput = cCrucibleRecipe.getDeclaredField("");
+        Field fRecipeOutput = cCrucibleRecipe.getDeclaredField("recipeOutput");
 
         fCraftingRecipes.setAccessible(true);
         fRecipeOutput.setAccessible(true);

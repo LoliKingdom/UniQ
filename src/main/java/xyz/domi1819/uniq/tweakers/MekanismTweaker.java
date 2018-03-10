@@ -1,6 +1,5 @@
 package xyz.domi1819.uniq.tweakers;
 
-import xyz.domi1819.uniq.Reflect;
 import xyz.domi1819.uniq.ResourceUnifier;
 import xyz.domi1819.uniq.tweaker.IGeneralTweaker;
 
@@ -8,7 +7,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-@SuppressWarnings("unchecked")
 public class MekanismTweaker implements IGeneralTweaker
 {
     @Override
@@ -23,11 +21,11 @@ public class MekanismTweaker implements IGeneralTweaker
         return "Mekanism";
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    @SuppressWarnings("ConstantConditions")
     public void run(ResourceUnifier unifier) throws Exception
     {
-        Class cRecipe = Reflect.getNestedClass(Class.forName("mekanism.common.recipe.RecipeHandler"), "Recipe");
+        Class cRecipe = Class.forName("mekanism.common.recipe.RecipeHandler$Recipe");
 
         Method mGet = cRecipe.getDeclaredMethod("get");
         Field fRecipeOutput = Class.forName("mekanism.common.recipe.machines.MachineRecipe").getDeclaredField("recipeOutput");

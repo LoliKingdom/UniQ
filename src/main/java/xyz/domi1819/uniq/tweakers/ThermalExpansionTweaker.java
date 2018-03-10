@@ -1,13 +1,11 @@
 package xyz.domi1819.uniq.tweakers;
 
-import xyz.domi1819.uniq.Reflect;
-import xyz.domi1819.uniq.tweaker.IGeneralTweaker;
 import xyz.domi1819.uniq.ResourceUnifier;
+import xyz.domi1819.uniq.tweaker.IGeneralTweaker;
 
 import java.lang.reflect.Field;
 import java.util.Map;
 
-@SuppressWarnings("ConstantConditions")
 public class ThermalExpansionTweaker implements IGeneralTweaker
 {
     @Override
@@ -25,19 +23,17 @@ public class ThermalExpansionTweaker implements IGeneralTweaker
     @Override
     public void run(ResourceUnifier unifier) throws Exception
     {
-        this.processSingleOutputRecipes(unifier, "cofh.thermalexpansion.util.crafting.FurnaceManager", "RecipeFurnace");
-        this.processDualOutputRecipes(unifier, "cofh.thermalexpansion.util.crafting.PulverizerManager", "RecipePulverizer");
-        this.processDualOutputRecipes(unifier, "cofh.thermalexpansion.util.crafting.SmelterManager", "RecipeSmelter");
-        this.processDualOutputRecipes(unifier, "cofh.thermalexpansion.util.crafting.SawmillManager", "RecipeSawmill");
+        this.processSingleOutputRecipes(unifier, "cofh.thermalexpansion.util.crafting.FurnaceManager", "$RecipeFurnace");
+        this.processDualOutputRecipes(unifier, "cofh.thermalexpansion.util.crafting.PulverizerManager", "$RecipePulverizer");
+        this.processDualOutputRecipes(unifier, "cofh.thermalexpansion.util.crafting.SmelterManager", "$RecipeSmelter");
+        this.processDualOutputRecipes(unifier, "cofh.thermalexpansion.util.crafting.SawmillManager", "$RecipeSawmill");
     }
 
     @SuppressWarnings("SameParameterValue")
     private void processSingleOutputRecipes(ResourceUnifier unifier, String baseName, String nestedName) throws Exception
     {
-        Class cBase = Class.forName(baseName);
-
-        Field fRecipeMap = cBase.getDeclaredField("recipeMap");
-        Field fOutput = Reflect.getNestedClass(cBase, nestedName).getDeclaredField("output");
+        Field fRecipeMap = Class.forName(baseName).getDeclaredField("recipeMap");
+        Field fOutput = Class.forName(baseName + nestedName).getDeclaredField("output");
 
         fRecipeMap.setAccessible(true);
         fOutput.setAccessible(true);
@@ -50,10 +46,9 @@ public class ThermalExpansionTweaker implements IGeneralTweaker
 
     private void processDualOutputRecipes(ResourceUnifier unifier, String baseName, String nestedName) throws Exception
     {
-        Class cBase = Class.forName(baseName);
-        Class cNested = Reflect.getNestedClass(cBase, nestedName);
+        Class cNested = Class.forName(baseName + nestedName);
 
-        Field fRecipeMap = cBase.getDeclaredField("recipeMap");
+        Field fRecipeMap = Class.forName(baseName).getDeclaredField("recipeMap");
         Field fOutputPrimary = cNested.getDeclaredField("primaryOutput");
         Field fOutputSecondary = cNested.getDeclaredField("secondaryOutput");
 

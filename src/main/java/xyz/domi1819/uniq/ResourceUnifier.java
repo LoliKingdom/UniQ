@@ -16,7 +16,6 @@ public class ResourceUnifier
     private HashMap<String, String> overrides = new HashMap<>();
     private NEIHelper neiHelper;
 
-    @SuppressWarnings("WeakerAccess")
     public ResourceUnifier build(Config config, Logger logger)
     {
         HashMap<String, Integer> modPriorities = new HashMap<>();

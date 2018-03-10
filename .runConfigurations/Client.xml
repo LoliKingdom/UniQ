@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Client" type="Application" factoryName="Application" singleton="true">
+    <option name="MAIN_CLASS_NAME" value="GradleStart" />
+    <option name="VM_PARAMETERS" value="-Xincgc -Xmx1024M -Xms1024M -Dfml.coreMods.load=xyz.domi1819.uniq.core.UniQoreLoadingPlugin" />
+    <option name="PROGRAM_PARAMETERS" value="" />
+    <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/runtime" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <option name="ENABLE_SWING_INSPECTOR" value="false" />
+    <option name="ENV_VARIABLES" />
+    <option name="PASS_PARENT_ENVS" value="true" />
+    <module name="ForgeGradle" />
+    <envs />
+    <method />
+  </configuration>
+</component>

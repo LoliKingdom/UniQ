@@ -6,7 +6,6 @@ import xyz.domi1819.uniq.tweaker.IRecipeTweaker;
 
 import java.util.*;
 
-@SuppressWarnings("WeakerAccess")
 public class RecipeProcessor
 {
     private HashMap<String, IRecipeTweaker> recipeTweakers = new HashMap<>();

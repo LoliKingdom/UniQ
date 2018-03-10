@@ -7,7 +7,6 @@ import cpw.mods.fml.common.ModMetadata;
 
 import java.util.Arrays;
 
-@SuppressWarnings("unused")
 public class UniQoreModContainer extends DummyModContainer
 {
     @SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
@@ -21,6 +20,7 @@ public class UniQoreModContainer extends DummyModContainer
         meta.name = "UniQore";
         meta.description = "UniQ CoreMod for NEI integration";
         meta.version = "1.0";
+        meta.url = "https://github.com/domi1819/UniQ";
         meta.authorList = Arrays.asList("domi1819");
     }
 

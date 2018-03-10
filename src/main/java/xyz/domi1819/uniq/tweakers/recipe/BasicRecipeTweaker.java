@@ -6,7 +6,6 @@ import xyz.domi1819.uniq.tweaker.IRecipeTweaker;
 
 import java.lang.reflect.Field;
 
-@SuppressWarnings("unused")
 public class BasicRecipeTweaker implements IRecipeTweaker
 {
     private Field fRecipeOutput;
@@ -23,6 +22,7 @@ public class BasicRecipeTweaker implements IRecipeTweaker
         this.modId = modId;
     }
 
+    @SuppressWarnings("unused")
     public BasicRecipeTweaker(String modId, String fieldName)
     {
         this.modId = modId;

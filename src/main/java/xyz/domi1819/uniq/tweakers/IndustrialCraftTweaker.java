@@ -1,7 +1,6 @@
 package xyz.domi1819.uniq.tweakers;
 
 import net.minecraft.item.ItemStack;
-import xyz.domi1819.uniq.Reflect;
 import xyz.domi1819.uniq.ResourceUnifier;
 import xyz.domi1819.uniq.tweaker.IGeneralTweaker;
 
@@ -10,7 +9,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings("unchecked")
 public class IndustrialCraftTweaker implements IGeneralTweaker
 {
     @Override
@@ -41,6 +39,7 @@ public class IndustrialCraftTweaker implements IGeneralTweaker
         this.processScrapBoxDrops(unifier, cRecipes);
     }
 
+    @SuppressWarnings("unchecked")
     private void processMachineRecipeManager(ResourceUnifier unifier, String machineName, Class cRecipes, Method mGetRecipes, Field fItems) throws Exception
     {
         Map map = (Map) mGetRecipes.invoke(cRecipes.getDeclaredField(machineName).get(null));
@@ -51,14 +50,11 @@ public class IndustrialCraftTweaker implements IGeneralTweaker
         }
     }
 
-    @SuppressWarnings("ConstantConditions")
     private void processScrapBoxDrops(ResourceUnifier unifier, Class cRecipes) throws Exception
     {
-        Class cItemScrapbox = Class.forName("ic2.core.item.ItemScrapbox");
-
         Field fScrapboxDrops = cRecipes.getDeclaredField("scrapboxDrops");
-        Field fDrops = Reflect.getNestedClass(cItemScrapbox, "ScrapboxRecipeManager").getDeclaredField("drops");
-        Field fItem = Reflect.getNestedClass(cItemScrapbox, "Drop").getDeclaredField("item");
+        Field fDrops = Class.forName("ic2.core.item.ItemScrapbox$ScrapboxRecipeManager").getDeclaredField("drops");
+        Field fItem = Class.forName("ic2.core.item.ItemScrapbox$Drop").getDeclaredField("item");
 
         fDrops.setAccessible(true);
         fItem.setAccessible(true);

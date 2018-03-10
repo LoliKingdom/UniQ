@@ -3,7 +3,6 @@ package xyz.domi1819.uniq.tweakers;
 import com.google.common.collect.Maps;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import xyz.domi1819.uniq.Reflect;
 import xyz.domi1819.uniq.ResourceUnifier;
 import xyz.domi1819.uniq.UniQ;
 import xyz.domi1819.uniq.tweaker.IGeneralTweaker;
@@ -32,15 +31,14 @@ public class RailcraftTweaker implements IGeneralTweaker
     {
         Class cCraftingManager = Class.forName("mods.railcraft.api.crafting.RailcraftCraftingManager");
 
-        this.processRecipes(unifier, "blastFurnace", cCraftingManager, "mods.railcraft.common.util.crafting.BlastFurnaceCraftingManager", "BlastFurnaceRecipe", true);
-        this.processRecipes(unifier, "cokeOven", cCraftingManager, "mods.railcraft.common.util.crafting.CokeOvenCraftingManager", "CokeOvenRecipe", true);
+        this.processRecipes(unifier, "blastFurnace", cCraftingManager, "mods.railcraft.common.util.crafting.BlastFurnaceCraftingManager", "$BlastFurnaceRecipe", true);
+        this.processRecipes(unifier, "cokeOven", cCraftingManager, "mods.railcraft.common.util.crafting.CokeOvenCraftingManager", "$CokeOvenRecipe", true);
 
-        this.processRecipes(unifier, "rockCrusher", cCraftingManager, "mods.railcraft.common.util.crafting.RockCrusherCraftingManager", "CrusherRecipe", false);
+        this.processRecipes(unifier, "rockCrusher", cCraftingManager, "mods.railcraft.common.util.crafting.RockCrusherCraftingManager", "$CrusherRecipe", false);
 
         this.processRollingMachineRecipes(unifier, cCraftingManager);
     }
 
-    @SuppressWarnings("ConstantConditions")
     private void processRecipes(ResourceUnifier unifier, String machineName, Class craftingManager, String className, String recipeClassName, boolean singleOutput) throws Exception
     {
         Class cBase = Class.forName(className);
@@ -54,7 +52,7 @@ public class RailcraftTweaker implements IGeneralTweaker
 
         if (singleOutput)
         {
-            Field fOutput = Reflect.getNestedClass(cBase, recipeClassName).getDeclaredField("output");
+            Field fOutput = Class.forName(className + recipeClassName).getDeclaredField("output");
             fOutput.setAccessible(true);
 
             for (Object recipe : (List) fRecipes.get(instance))
@@ -64,7 +62,7 @@ public class RailcraftTweaker implements IGeneralTweaker
         }
         else
         {
-            Field fOutputs = Reflect.getNestedClass(cBase, recipeClassName).getDeclaredField("outputs");
+            Field fOutputs = Class.forName(className + recipeClassName).getDeclaredField("outputs");
             fOutputs.setAccessible(true);
 
             ItemStack output;

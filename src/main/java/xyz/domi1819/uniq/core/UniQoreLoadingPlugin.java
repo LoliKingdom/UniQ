@@ -4,7 +4,6 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
 import java.util.Map;
 
-@SuppressWarnings("unused")
 @IFMLLoadingPlugin.MCVersion("1.7.10")
 public class UniQoreLoadingPlugin implements IFMLLoadingPlugin
 {

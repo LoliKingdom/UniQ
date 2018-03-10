@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+@SuppressWarnings("unchecked")
 public class ForestryTweaker implements IGeneralTweaker
 {
     @Override
@@ -53,7 +54,6 @@ public class ForestryTweaker implements IGeneralTweaker
         }
     }
 
-    @SuppressWarnings("unchecked")
     private void processCentrifugeRecipes(ResourceUnifier unifier) throws Exception
     {
         Field fRecipes = Class.forName("forestry.factory.recipes.CentrifugeRecipeManager").getDeclaredField("recipes");
@@ -70,7 +70,6 @@ public class ForestryTweaker implements IGeneralTweaker
         }
     }
 
-    @SuppressWarnings("unchecked")
     private void processBeeProducts(ResourceUnifier unifier) throws Exception
     {
         Class cBeeSpecies = Class.forName("forestry.api.apiculture.IAlleleBeeSpecies");

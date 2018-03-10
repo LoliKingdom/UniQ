@@ -4,7 +4,6 @@ import net.minecraftforge.common.config.Configuration;
 
 import java.io.File;
 
-@SuppressWarnings("WeakerAccess")
 public class Config
 {
     public String[] unificationTargets;
@@ -49,11 +48,11 @@ public class Config
         return this;
     }
 
-    public static class Defaults
+    private static class Defaults
     {
         // @formatter:off
 
-        public String[] targets = new String[]
+        private String[] targets = new String[]
         {
             "Aluminum",
             "Amber",
@@ -76,7 +75,7 @@ public class Config
             "Uranium"
         };
 
-        public String[] prefixes = new String[]
+        private String[] prefixes = new String[]
         {
             "block",
             "dust",
@@ -89,7 +88,7 @@ public class Config
             "plate"
         };
 
-        public String[] inclusions = new String[]
+        private String[] inclusions = new String[]
         {
             "blockFuelCoke",
             "blockPlastic",
@@ -109,7 +108,7 @@ public class Config
             "sheetPlastic"
         };
 
-        public String[] priorities = new String[]
+        private String[] priorities = new String[]
         {
             "minecraft",
             "ThermalFoundation",
@@ -118,7 +117,7 @@ public class Config
             "IC2"
         };
 
-        public String[] overrides = new String[]
+        private String[] overrides = new String[]
         {
             "oreAluminum:TConstruct"
         };

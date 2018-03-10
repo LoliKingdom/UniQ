@@ -166,6 +166,28 @@
       </item>
     </group>
   </component>
+  <component name="ProjectCodeStyleConfiguration">
+    <option name="USE_PER_PROJECT_SETTINGS" value="true" />
+    <code_scheme name="Project" version="173">
+      <option name="FORMATTER_TAGS_ENABLED" value="true" />
+      <codeStyleSettings language="JAVA">
+        <option name="BRACE_STYLE" value="2" />
+        <option name="CLASS_BRACE_STYLE" value="2" />
+        <option name="METHOD_BRACE_STYLE" value="2" />
+        <option name="ALIGN_THROWS_KEYWORD" value="true" />
+        <option name="SPACE_WITHIN_ARRAY_INITIALIZER_BRACES" value="true" />
+        <option name="SPACE_BEFORE_ARRAY_INITIALIZER_LBRACE" value="true" />
+        <option name="KEEP_SIMPLE_METHODS_IN_ONE_LINE" value="true" />
+        <option name="KEEP_SIMPLE_LAMBDAS_IN_ONE_LINE" value="true" />
+        <option name="KEEP_SIMPLE_CLASSES_IN_ONE_LINE" value="true" />
+        <option name="ENUM_CONSTANTS_WRAP" value="2" />
+        <option name="WRAP_ON_TYPING" value="0" />
+        <indentOptions>
+          <option name="CONTINUATION_INDENT_SIZE" value="0" />
+        </indentOptions>
+      </codeStyleSettings>
+    </code_scheme>
+  </component>
   <component name="ProjectCodeStyleSettingsManager">
     <option name="PER_PROJECT_SETTINGS">
       <value>
@@ -205,6 +227,7 @@
         <w>crazypants</w>
         <w>crystallizer</w>
         <w>domi</w>
+        <w>electrum</w>
         <w>ender</w>
         <w>enderconstructor</w>
         <w>enderio</w>
@@ -213,6 +236,7 @@
         <w>hastener</w>
         <w>immersive</w>
         <w>immersiveengineering</w>
+        <w>lapis</w>
         <w>lnet</w>
         <w>macerator</w>
         <w>mekanism</w>

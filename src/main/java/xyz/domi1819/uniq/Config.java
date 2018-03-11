@@ -15,7 +15,6 @@ public class Config
     public String[] unificationOverrides;
 
     public boolean enableNEIIntegration;
-    public boolean debug;
 
     private Configuration config;
 
@@ -30,15 +29,14 @@ public class Config
 
         Defaults defaults = new Defaults();
 
-        this.unificationTargets = this.config.getStringList("unificationTargets", "settings", defaults.targets, "");
-        this.unificationPrefixes = this.config.getStringList("unificationPrefixes", "settings", defaults.prefixes, "");
-        this.unificationInclusions = this.config.getStringList("unificationInclusions", "settings", defaults.inclusions, "");
+        this.unificationTargets = this.config.getStringList("unificationTargets", "settings", defaults.targets(), "");
+        this.unificationPrefixes = this.config.getStringList("unificationPrefixes", "settings", defaults.prefixes(), "");
+        this.unificationInclusions = this.config.getStringList("unificationInclusions", "settings", defaults.inclusions(), "");
 
-        this.unificationPriorities = this.config.getStringList("unificationPriorities", "settings", defaults.priorities, "");
-        this.unificationOverrides = this.config.getStringList("unificationOverrides", "settings", defaults.overrides, "");
+        this.unificationPriorities = this.config.getStringList("unificationPriorities", "settings", defaults.priorities(), "");
+        this.unificationOverrides = this.config.getStringList("unificationOverrides", "settings", defaults.overrides(), "");
 
-        this.enableNEIIntegration = this.config.getBoolean("enableNEIIntegration", "settings", true, "");
-        this.debug = this.config.getBoolean("debug", "settings", false, "");
+        this.enableNEIIntegration = this.config.getBoolean("hideVariantsNEI", "settings", false, "");
 
         if (this.config.hasChanged())
         {
@@ -52,75 +50,90 @@ public class Config
     {
         // @formatter:off
 
-        private String[] targets = new String[]
+        private String[] targets()
         {
-            "Aluminum",
-            "Amber",
-            "Bronze",
-            "Copper",
-            "Electrum",
-            "Gold",
-            "Invar",
-            "Iron",
-            "Lead",
-            "Lithium",
-            "Nickel",
-            "Peridot",
-            "Platinum",
-            "Ruby",
-            "Sapphire",
-            "Silver",
-            "Steel",
-            "Tin",
-            "Uranium"
-        };
+            return new String[]
+            {
+                "Aluminum",
+                "Amber",
+                "Bronze",
+                "Copper",
+                "Electrum",
+                "Gold",
+                "Invar",
+                "Iron",
+                "Lead",
+                "Lithium",
+                "Nickel",
+                "Peridot",
+                "Platinum",
+                "Ruby",
+                "Sapphire",
+                "Silver",
+                "Steel",
+                "Tin",
+                "Uranium"
+            };
+        }
 
-        private String[] prefixes = new String[]
+        private String[] prefixes()
         {
-            "block",
-            "dust",
-            "dustTiny",
-            "gear",
-            "gem",
-            "ingot",
-            "nugget",
-            "ore",
-            "plate"
-        };
+            return new String[]
+            {
+                "block",
+                "dust",
+                "dustTiny",
+                "gear",
+                "gem",
+                "ingot",
+                "nugget",
+                "ore",
+                "plate"
+            };
+        }
 
-        private String[] inclusions = new String[]
+        private String[] inclusions()
         {
-            "blockFuelCoke",
-            "blockPlastic",
-            "dustCharcoal",
-            "dustCoal",
-            "dustDiamond",
-            "dustLapis",
-            "dustObsidian",
-            "dustPlastic",
-            "dustSalt",
-            "dustSaltpeter",
-            "dustStone",
-            "dustSulfur",
-            "dustWood",
-            "fuelCoke",
-            "itemRubber",
-            "sheetPlastic"
-        };
+            return new String[]
+            {
+                "blockFuelCoke",
+                "blockPlastic",
+                "dustCharcoal",
+                "dustCoal",
+                "dustDiamond",
+                "dustLapis",
+                "dustObsidian",
+                "dustPlastic",
+                "dustSalt",
+                "dustSaltpeter",
+                "dustStone",
+                "dustSulfur",
+                "dustWood",
+                "fuelCoke",
+                "itemRubber",
+                "sheetPlastic"
+            };
+        }
 
-        private String[] priorities = new String[]
+        private String[] priorities()
         {
-            "minecraft",
-            "ThermalFoundation",
-            "Mekanism",
-            "ImmersiveEngineering",
-            "IC2"
-        };
+            return new String[]
+            {
+                "minecraft",
+                "ThermalFoundation",
+                "Mekanism",
+                "ImmersiveEngineering",
+                "IC2"
+            };
+        }
 
-        private String[] overrides = new String[]
+        private String[] overrides()
         {
-            "oreAluminum:TConstruct"
-        };
+            return new String[]
+            {
+                "oreAluminum:TConstruct"
+            };
+        }
 
         // @formatter:on
     }

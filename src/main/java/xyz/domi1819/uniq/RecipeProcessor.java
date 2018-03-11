@@ -42,6 +42,7 @@ public class RecipeProcessor
 
     public void transform(ResourceUnifier unifier, List<IRecipe> recipes)
     {
+        @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
         Set<String> unknownRecipeClasses = new HashSet<>();
 
         for (IRecipe recipe : recipes)
@@ -63,12 +64,6 @@ public class RecipeProcessor
             {
                 unknownRecipeClasses.add(recipe.getClass().getName());
             }
-        }
-
-        if (UniQ.instance.config.debug)
-        {
-            System.out.println("Unknown recipe classes:");
-            unknownRecipeClasses.forEach(System.out::println);
         }
     }
 }

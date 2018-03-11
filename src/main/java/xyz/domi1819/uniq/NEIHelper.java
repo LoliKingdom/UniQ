@@ -47,4 +47,10 @@ public class NEIHelper
     {
         return unifier.getPreferredStack(stack);
     }
+
+    @SuppressWarnings("unused")
+    public static boolean itemsEqual(ItemStack first, ItemStack second)
+    {
+        return first == second || first != null && first.getItem() == second.getItem() && first.getItemDamage() == second.getItemDamage();
+    }
 }

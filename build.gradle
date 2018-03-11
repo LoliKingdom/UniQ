@@ -17,7 +17,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.2"
+version = "1.3"
 group= "xyz.domi1819.uniq" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "uniq"
 

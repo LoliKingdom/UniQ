@@ -6,18 +6,19 @@ import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class ResourceUnifier
 {
     private HashMap<Integer, ItemStack> preferences = new HashMap<>();
     private HashMap<String, String> overrides = new HashMap<>();
+    private HashSet<String> blacklist = new HashSet<>();
     private NEIHelper neiHelper;
 
     public ResourceUnifier build(Config config, Logger logger)
     {
+        Collections.addAll(blacklist, config.unificationBlacklist);
+
         HashMap<String, Integer> modPriorities = new HashMap<>();
         String[] unificationPriorities = config.unificationPriorities;
 
@@ -59,6 +60,18 @@ public class ResourceUnifier
 
     public ItemStack getPreferredStack(ItemStack stack)
     {
+        if (stack == null)
+        {
+            return null;
+        }
+
+        String identifier = getIdentifier(stack);
+
+        if (this.blacklist.contains(identifier) || this.blacklist.contains(String.format("%s:%s", identifier, stack.getItemDamage())))
+        {
+            return stack;
+        }
+
         int[] ids = OreDictionary.getOreIDs(stack);
 
         for (int id : ids)
@@ -157,7 +170,12 @@ public class ResourceUnifier
             {
                 if (bestItemStack != null)
                 {
-                    this.neiHelper.tryHideItem(bestItemStack);
+                    String identifier = getIdentifier(bestItemStack);
+
+                    if (!blacklist.contains(identifier) && !blacklist.contains(String.format("%s:%s", identifier, bestItemStack.getItemDamage())))
+                    {
+                        this.neiHelper.tryHideItem(bestItemStack);
+                    }
                 }
 
                 bestItemStack = stack;
@@ -165,7 +183,12 @@ public class ResourceUnifier
             }
             else
             {
-                this.neiHelper.tryHideItem(stack);
+                String identifier = getIdentifier(stack);
+
+                if (!blacklist.contains(identifier) && !blacklist.contains(String.format("%s:%s", identifier, stack.getItemDamage())))
+                {
+                    this.neiHelper.tryHideItem(stack);
+                }
             }
         }
 
@@ -176,11 +199,13 @@ public class ResourceUnifier
     {
         String modId = GameRegistry.findUniqueIdentifierFor(stack.getItem()).modId;
 
-        if (modId.equals(""))
-        {
-            return "minecraft";
-        }
+        return modId.equals("") ? "minecraft" : modId;
+    }
 
-        return modId;
+    private String getIdentifier(ItemStack stack)
+    {
+        GameRegistry.UniqueIdentifier ident = GameRegistry.findUniqueIdentifierFor(stack.getItem());
+
+        return ident.modId.equals("") ? "minecraft:" + ident.name : ident.toString();
     }
 }

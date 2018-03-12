@@ -11,8 +11,8 @@ public class Config
     public String[] unificationInclusions;
 
     public String[] unificationPriorities;
-
     public String[] unificationOverrides;
+    public String[] unificationBlacklist;
 
     public boolean enableNEIIntegration;
 
@@ -29,12 +29,13 @@ public class Config
 
         Defaults defaults = new Defaults();
 
-        this.unificationTargets = this.config.getStringList("unificationTargets", "settings", defaults.targets(), "");
-        this.unificationPrefixes = this.config.getStringList("unificationPrefixes", "settings", defaults.prefixes(), "");
-        this.unificationInclusions = this.config.getStringList("unificationInclusions", "settings", defaults.inclusions(), "");
+        this.unificationTargets = this.config.getStringList("unificationTargets", "settings", defaults.targets(), "Item types that should be unified, without their prefixes.");
+        this.unificationPrefixes = this.config.getStringList("unificationPrefixes", "settings", defaults.prefixes(), "Prefixes that will be prepended to the targets.");
+        this.unificationInclusions = this.config.getStringList("unificationInclusions", "settings", defaults.inclusions(), "Additionally included types.");
 
-        this.unificationPriorities = this.config.getStringList("unificationPriorities", "settings", defaults.priorities(), "");
-        this.unificationOverrides = this.config.getStringList("unificationOverrides", "settings", defaults.overrides(), "");
+        this.unificationPriorities = this.config.getStringList("unificationPriorities", "settings", defaults.priorities(), "ModIds in the order that should be used to find the best items.");
+        this.unificationOverrides = this.config.getStringList("unificationOverrides", "settings", defaults.overrides(), "Types that should be forced for unification to a specific mod.");
+        this.unificationBlacklist = this.config.getStringList("unificationBlacklist", "settings", defaults.blacklist(), "Specific items that should never be unified. Optionally with meta/dmg.");
 
         this.enableNEIIntegration = this.config.getBoolean("hideVariantsNEI", "settings", false, "");
 
@@ -132,6 +133,15 @@ public class Config
             return new String[]
             {
                 "oreAluminum:TConstruct"
+            };
+        }
+
+        private String[] blacklist()
+        {
+            return new String[]
+            {
+                "TConstruct:GravelOre",
+                "IC2:itemPartIndustrialDiamond:0"
             };
         }
 

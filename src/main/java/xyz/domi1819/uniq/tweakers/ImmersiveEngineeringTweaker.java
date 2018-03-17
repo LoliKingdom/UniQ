@@ -1,7 +1,11 @@
 package xyz.domi1819.uniq.tweakers;
 
 import com.google.common.collect.Multimap;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import xyz.domi1819.uniq.ResourceUnifier;
 import xyz.domi1819.uniq.tweaker.IGeneralTweaker;
 
@@ -11,6 +15,23 @@ import java.util.Map;
 
 public class ImmersiveEngineeringTweaker implements IGeneralTweaker
 {
+    public ImmersiveEngineeringTweaker()
+    {
+        if (Loader.isModLoaded(getModId()))
+        {
+            Item metal = GameRegistry.findItem(getModId(), "metal");
+
+            OreDictionary.registerOre("dustNetherQuartz", new ItemStack(metal, 1, 18));
+
+            OreDictionary.registerOre("ingotAluminium", new ItemStack(metal, 1, 1));
+            OreDictionary.registerOre("dustAluminium", new ItemStack(metal, 1, 11));
+            OreDictionary.registerOre("nuggetAluminium", new ItemStack(metal, 1, 23));
+            OreDictionary.registerOre("plateAluminium", new ItemStack(metal, 1, 32));
+
+            OreDictionary.registerOre("stickAluminium", new ItemStack(GameRegistry.findItem(getModId(), "material"), 1, 16));
+        }
+    }
+
     @Override
     public String getName()
     {

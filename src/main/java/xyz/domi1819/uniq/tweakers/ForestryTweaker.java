@@ -97,15 +97,18 @@ public class ForestryTweaker implements IGeneralTweaker
 
     private void processProductMap(ResourceUnifier unifier, Map<ItemStack, Float> products)
     {
-        for (Map.Entry<ItemStack, Float> product : new HashMap<>(products).entrySet())
+        if (products instanceof HashMap)
         {
-            ItemStack output = product.getKey();
-            ItemStack replacement = unifier.getPreferredStack(output);
-
-            if (!output.isItemEqual(replacement))
+            for (Map.Entry<ItemStack, Float> product : new HashMap<>(products).entrySet())
             {
-                products.remove(output);
-                products.put(replacement, product.getValue());
+                ItemStack output = product.getKey();
+                ItemStack replacement = unifier.getPreferredStack(output);
+
+                if (!output.isItemEqual(replacement))
+                {
+                    products.remove(output);
+                    products.put(replacement, product.getValue());
+                }
             }
         }
     }

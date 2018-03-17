@@ -1,6 +1,9 @@
 package xyz.domi1819.uniq.tweakers;
 
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import xyz.domi1819.uniq.ResourceUnifier;
 import xyz.domi1819.uniq.tweaker.IGeneralTweaker;
 
@@ -10,6 +13,14 @@ import java.util.Map;
 @SuppressWarnings("unchecked")
 public class NuclearCraftTweaker implements IGeneralTweaker
 {
+    public NuclearCraftTweaker()
+    {
+        if (Loader.isModLoaded(getModId()))
+        {
+            OreDictionary.registerOre("dustNetherQuartz", new ItemStack(GameRegistry.findItem(getModId(), "material"), 1, 13));
+        }
+    }
+
     @Override
     public String getName()
     {

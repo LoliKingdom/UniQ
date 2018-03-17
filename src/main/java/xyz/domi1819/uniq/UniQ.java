@@ -2,6 +2,7 @@ package xyz.domi1819.uniq;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.*;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -19,7 +20,7 @@ import java.util.*;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class UniQ
 {
-    @Mod.Instance("uniq")
+    @Instance("uniq")
     public static UniQ instance;
 
     public Logger logger;
@@ -29,14 +30,14 @@ public class UniQ
 
     public ArrayList<IGeneralTweaker> tweakers = new ArrayList<>();
 
-    @Mod.EventHandler
+    @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
         this.logger = event.getModLog();
         this.config = new Config(event.getSuggestedConfigurationFile()).load();
     }
 
-    @Mod.EventHandler
+    @EventHandler
     public void init(FMLInitializationEvent event)
     {
         this.registerRecipeTweaker(new MinecraftRecipeTweaker("field_77575_e"), "net.minecraft.item.crafting.ShapedRecipes");
@@ -50,6 +51,8 @@ public class UniQ
         this.registerRecipeTweaker(new BasicRecipeTweaker("appliedenergistics2"), "appeng.recipes.game.ShapedRecipe");
         this.registerRecipeTweaker(new BasicRecipeTweaker("appliedenergistics2"), "appeng.recipes.game.ShapelessRecipe");
         this.registerRecipeTweaker(new ForestryRecipeTweaker(), "forestry.core.recipes.ShapedRecipeCustom");
+        this.registerRecipeTweaker(new BasicRecipeTweaker("gregtech", "output", "net.minecraftforge.oredict.ShapedOreRecipe"), "gregtech.api.util.GT_Shaped_Recipe");
+        this.registerRecipeTweaker(new BasicRecipeTweaker("gregtech", "output", "net.minecraftforge.oredict.ShapelessOreRecipe"), "gregtech.api.util.GT_Shapeless_Recipe");
 
         this.registerTweaker(new MinecraftTweaker());
         this.registerTweaker(new ThermalExpansionTweaker());
@@ -66,9 +69,10 @@ public class UniQ
         this.registerTweaker(new ExtraUtilitiesTweaker());
         this.registerTweaker(new AdvancedSolarPanelsTweaker());
         this.registerTweaker(new ThaumcraftTweaker());
+        this.registerTweaker(new GregTechTweaker());
     }
 
-    @Mod.EventHandler
+    @EventHandler
     public void loadComplete(FMLLoadCompleteEvent event)
     {
         this.logger.info("Building target list...");

@@ -215,6 +215,7 @@
   <component name="ProjectDictionaryState">
     <dictionary name="Domi">
       <words>
+        <w>addon</w>
         <w>advsolar</w>
         <w>apiculture</w>
         <w>appeng</w>
@@ -222,6 +223,7 @@
         <w>blastfurance</w>
         <w>blockcutter</w>
         <w>blusunrize</w>
+        <w>certus</w>
         <w>codechicken</w>
         <w>cofh</w>
         <w>crazypants</w>
@@ -233,6 +235,8 @@
         <w>enderio</w>
         <w>energistics</w>
         <w>extrautils</w>
+        <w>gregtech</w>
+        <w>gregtechproxy</w>
         <w>hastener</w>
         <w>immersive</w>
         <w>immersiveengineering</w>
@@ -242,6 +246,7 @@
         <w>lnet</w>
         <w>macerator</w>
         <w>mekanism</w>
+        <w>metaitem</w>
         <w>metalformer</w>
         <w>minecraft</w>
         <w>minecraftforge</w>
@@ -258,6 +263,7 @@
         <w>thaumcraft</w>
         <w>thermalexpansion</w>
         <w>tileentity</w>
+        <w>unificator</w>
         <w>uniq</w>
         <w>uniqore</w>
       </words>

@@ -31,7 +31,8 @@ public class UniQoreClassTransformer implements IClassTransformer
                         {
                             InsnList list = new InsnList();
 
-                            LabelNode cleanup = new LabelNode();
+                            LabelNode endPop2 = new LabelNode();
+                            LabelNode endPop1 = new LabelNode();
                             LabelNode end = new LabelNode();
 
                             list.add(new VarInsnNode(ALOAD, 1));
@@ -40,12 +41,15 @@ public class UniQoreClassTransformer implements IClassTransformer
                             list.add(new VarInsnNode(ALOAD, 1));
                             list.add(new InsnNode(ICONST_0));
                             list.add(new InsnNode(AALOAD));
+                            list.add(new InsnNode(DUP));
+                            list.add(new TypeInsnNode(INSTANCEOF, "net/minecraft/item/ItemStack"));
+                            list.add(new JumpInsnNode(IFEQ, endPop1));
                             list.add(new TypeInsnNode(CHECKCAST, "net/minecraft/item/ItemStack"));
                             list.add(new InsnNode(DUP));
                             list.add(new MethodInsnNode(INVOKESTATIC, "xyz/domi1819/uniq/NEIHelper", "getPreferredStack", "(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/item/ItemStack;", false));
                             list.add(new InsnNode(DUP2));
                             list.add(new MethodInsnNode(INVOKESTATIC, "xyz/domi1819/uniq/NEIHelper", "itemsEqual", "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z", false));
-                            list.add(new JumpInsnNode(IFNE, cleanup));
+                            list.add(new JumpInsnNode(IFNE, endPop2));
                             list.add(new VarInsnNode(ALOAD, 7));
                             list.add(new InsnNode(SWAP));
                             list.add(new VarInsnNode(ALOAD, 0));
@@ -60,12 +64,14 @@ public class UniQoreClassTransformer implements IClassTransformer
                             list.add(new MethodInsnNode(INVOKEINTERFACE, "codechicken/nei/recipe/ICraftingHandler", "getRecipeHandler", "(Ljava/lang/String;[Ljava/lang/Object;)Lcodechicken/nei/recipe/ICraftingHandler;", true));
                             list.add(new InsnNode(DUP));
                             list.add(new MethodInsnNode(INVOKEINTERFACE, "codechicken/nei/recipe/ICraftingHandler", "numRecipes", "()I", true));
-                            list.add(new JumpInsnNode(IFLE, cleanup));
+                            list.add(new JumpInsnNode(IFLE, endPop2));
                             list.add(new VarInsnNode(ALOAD, 5));
                             list.add(new InsnNode(SWAP));
                             list.add(new MethodInsnNode(INVOKEVIRTUAL, "java/util/ArrayList", "add", "(Ljava/lang/Object;)Z", false));
-                            list.add(cleanup);
-                            list.add(new InsnNode(POP2));
+                            list.add(endPop2);
+                            list.add(new InsnNode(POP));
+                            list.add(endPop1);
+                            list.add(new InsnNode(POP));
                             list.add(end);
 
                             body.insertBefore(instruction, list);

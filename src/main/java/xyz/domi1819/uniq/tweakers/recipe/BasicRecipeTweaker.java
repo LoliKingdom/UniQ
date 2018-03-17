@@ -12,6 +12,7 @@ public class BasicRecipeTweaker implements IRecipeTweaker
 
     private String modId = "";
     private String fieldName = "output";
+    private String baseClass;
 
     public BasicRecipeTweaker()
     {
@@ -29,6 +30,13 @@ public class BasicRecipeTweaker implements IRecipeTweaker
         this.fieldName = fieldName;
     }
 
+    public BasicRecipeTweaker(String modId, String fieldName, String baseClass)
+    {
+        this.modId = modId;
+        this.fieldName = fieldName;
+        this.baseClass = baseClass;
+    }
+
     @Override
     public String getName()
     {
@@ -44,7 +52,7 @@ public class BasicRecipeTweaker implements IRecipeTweaker
     @Override
     public void prepareTransform(String className) throws Exception
     {
-        this.fRecipeOutput = Class.forName(className).getDeclaredField(this.fieldName);
+        this.fRecipeOutput = Class.forName(this.baseClass == null ? className : this.baseClass).getDeclaredField(this.fieldName);
         this.fRecipeOutput.setAccessible(true);
     }
 

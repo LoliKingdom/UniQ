@@ -206,6 +206,6 @@ public class ResourceUnifier
     {
         GameRegistry.UniqueIdentifier ident = GameRegistry.findUniqueIdentifierFor(stack.getItem());
 
-        return ident.modId.equals("") ? "minecraft:" + ident.name : ident.toString();
+        return ident == null ? null : ident.modId.equals("") ? "minecraft:" + ident.name : ident.toString();
     }
 }

@@ -57,7 +57,10 @@ public class Config
             {
                 "Aluminum",
                 "Amber",
+                "Brass",
                 "Bronze",
+                "CertusQuartz",
+                "Cobalt",
                 "Copper",
                 "Electrum",
                 "Gold",
@@ -65,7 +68,9 @@ public class Config
                 "Iron",
                 "Lead",
                 "Lithium",
+                "NetherQuartz",
                 "Nickel",
+                "Osmium",
                 "Peridot",
                 "Platinum",
                 "Ruby",
@@ -124,7 +129,9 @@ public class Config
                 "ThermalFoundation",
                 "Mekanism",
                 "ImmersiveEngineering",
-                "IC2"
+                "TConstruct",
+                "appliedenergistics2",
+                "IC2",
             };
         }
 

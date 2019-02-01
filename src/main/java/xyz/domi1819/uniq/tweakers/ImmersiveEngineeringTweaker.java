@@ -15,23 +15,6 @@ import java.util.Map;
 
 public class ImmersiveEngineeringTweaker implements IGeneralTweaker
 {
-    public ImmersiveEngineeringTweaker()
-    {
-        if (Loader.isModLoaded(getModId()))
-        {
-            Item metal = GameRegistry.findItem(getModId(), "metal");
-
-            OreDictionary.registerOre("dustNetherQuartz", new ItemStack(metal, 1, 18));
-
-            OreDictionary.registerOre("ingotAluminium", new ItemStack(metal, 1, 1));
-            OreDictionary.registerOre("dustAluminium", new ItemStack(metal, 1, 11));
-            OreDictionary.registerOre("nuggetAluminium", new ItemStack(metal, 1, 23));
-            OreDictionary.registerOre("plateAluminium", new ItemStack(metal, 1, 32));
-
-            OreDictionary.registerOre("stickAluminium", new ItemStack(GameRegistry.findItem(getModId(), "material"), 1, 16));
-        }
-    }
-
     @Override
     public String getName()
     {

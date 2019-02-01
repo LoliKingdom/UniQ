@@ -1,6 +1,8 @@
 package xyz.domi1819.uniq;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Logger;
@@ -10,12 +12,55 @@ import java.util.*;
 
 public class ResourceUnifier
 {
+    private Logger logger;
     private HashMap<Integer, ItemStack> preferences = new HashMap<>();
     private HashMap<String, String> overrides = new HashMap<>();
     private HashSet<String> blacklist = new HashSet<>();
     private NEIHelper neiHelper;
 
-    public ResourceUnifier build(Config config, Logger logger)
+    public ResourceUnifier(Logger logger)
+    {
+        this.logger = logger;
+    }
+
+    public ResourceUnifier addOredictNames(String[] rules)
+    {
+        for (String rule : rules)
+        {
+            String[] ruleComponents = rule.split(":");
+
+            if (ruleComponents.length < 3 || ruleComponents.length > 5)
+            {
+                this.logger.error("Custom OreDict rule " + rule + " couldn't be parsed. Skipping.");
+                continue;
+            }
+
+            if (Loader.isModLoaded(ruleComponents[1]) || "minecraft".equals(ruleComponents[1]))
+            {
+                int meta = 0;
+                String itemName = ruleComponents[1];
+
+                Item item = GameRegistry.findItem(itemName, ruleComponents[2]);
+
+                if (item == null)
+                {
+                    this.logger.error("Item " + ruleComponents[1] + ":" + ruleComponents[2] + " wasn't found despite the mod being loaded!");
+                    continue;
+                }
+
+                if (ruleComponents.length == 4)
+                {
+                    meta = Integer.parseInt(ruleComponents[3]);
+                }
+
+                OreDictionary.registerOre(ruleComponents[0], new ItemStack(item, 1, meta));
+            }
+        }
+
+        return this;
+    }
+
+    public ResourceUnifier build(Config config)
     {
         Collections.addAll(blacklist, config.unificationBlacklist);
 
@@ -35,7 +80,7 @@ public class ResourceUnifier
 
             if (colonIndex == -1)
             {
-                logger.error("Format error in line " + line);
+                this.logger.error("Format error in line " + line);
                 continue;
             }
 

@@ -75,9 +75,13 @@ public class UniQ
     @EventHandler
     public void loadComplete(FMLLoadCompleteEvent event)
     {
+        this.logger.info("Registering custom OreDict entries...");
+
+        ResourceUnifier unifier = new ResourceUnifier(this.logger).addOredictNames(this.config.customOreDictNames);
+
         this.logger.info("Building target list...");
 
-        ResourceUnifier unifier = new ResourceUnifier().build(this.config, this.logger);
+        unifier.build(this.config);
 
         this.logger.info("Setting up recipe tweakers...");
 

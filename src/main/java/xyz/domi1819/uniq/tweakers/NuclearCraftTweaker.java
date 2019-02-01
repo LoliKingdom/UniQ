@@ -13,14 +13,6 @@ import java.util.Map;
 @SuppressWarnings("unchecked")
 public class NuclearCraftTweaker implements IGeneralTweaker
 {
-    public NuclearCraftTweaker()
-    {
-        if (Loader.isModLoaded(getModId()))
-        {
-            OreDictionary.registerOre("dustNetherQuartz", new ItemStack(GameRegistry.findItem(getModId(), "material"), 1, 13));
-        }
-    }
-
     @Override
     public String getName()
     {

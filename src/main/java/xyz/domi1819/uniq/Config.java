@@ -16,6 +16,8 @@ public class Config
 
     public boolean enableNEIIntegration;
 
+    public String[] customOreDictNames;
+
     private Configuration config;
 
     public Config(File file)
@@ -38,6 +40,8 @@ public class Config
         this.unificationBlacklist = this.config.getStringList("unificationBlacklist", "settings", defaults.blacklist(), "Specific items that should never be unified. Optionally with meta/dmg.");
 
         this.enableNEIIntegration = this.config.getBoolean("hideVariantsNEI", "settings", false, "");
+
+        this.customOreDictNames = this.config.getStringList("customOreDictNames", "settings", defaults.customNames(), "Custom additions to the Ore Dictionary. Useful if a mod doesn't add common names to specific items.");
 
         if (this.config.hasChanged())
         {
@@ -149,6 +153,21 @@ public class Config
             {
                 "TConstruct:GravelOre",
                 "IC2:itemPartIndustrialDiamond:0"
+            };
+        }
+
+        private String[] customNames()
+        {
+            return new String[]
+            {
+                "dustNetherQuartz:NuclearCraft:material:13",
+
+                "dustNetherQuartz:ImmersiveEngineering:metal:18",
+                "ingotAluminium:ImmersiveEngineering:metal:1",
+                "dustAluminium:ImmersiveEngineering:metal:11",
+                "nuggetAluminium:ImmersiveEngineering:metal:23",
+                "plateAluminium:ImmersiveEngineering:metal:32",
+                "stickAluminium:ImmersiveEngineering:material:16"
             };
         }
 

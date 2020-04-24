@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <resourceExtensions>
+      <entry name=".+\.(properties|xml|html|dtd|tld)" />
+      <entry name=".+\.(gif|png|jpeg|jpg)" />
+    </resourceExtensions>
+    <wildcardResourcePatterns>
+      <entry name="!?*.class" />
+      <entry name="!?*.scala" />
+      <entry name="!?*.java" />
+      <entry name="!?*.groovy" />
+    </wildcardResourcePatterns>
+    <bytecodeTargetLevel target="1.8" />
+  </component>
+  <component name="CopyrightManager" default="" />
+  <component name="DependencyValidationManager">
+    <option name="SKIP_IMPORT_STATEMENTS" value="false" />
+  </component>
+  <component name="GradleUISettings">
+    <setting name="root" />
+  </component>
+  <component name="GradleUISettings2">
+    <setting name="root" />
+  </component>
+  <component name="IdProvider" IDEtalkID="11DA1DB66DD62DDA1ED602B7079FE97C" />
+  <component name="InspectionProjectProfileManager">
+    <profile version="1.0">
+      <option name="myName" value="Project Default" />
+    </profile>
+    <version value="1.0" />
+  </component>
+  <component name="JavadocGenerationManager">
+    <option name="OTHER_OPTIONS" value="" />
+  </component>
+  <component name="ProjectCodeStyleConfiguration">
+    <option name="PREFERRED_PROJECT_CODE_STYLE" value="Default" />
+  </component>
+  <component name="ProjectDictionaryState">
+    <dictionary name="Domi">
+      <words>
+        <w>advsolar</w>
+        <w>apiculture</w>
+        <w>appeng</w>
+        <w>appliedenergistics</w>
+        <w>blastfurance</w>
+        <w>blockcutter</w>
+        <w>blusunrize</w>
+        <w>certus</w>
+        <w>codechicken</w>
+        <w>cofh</w>
+        <w>crazypants</w>
+        <w>crystallizer</w>
+        <w>domi</w>
+        <w>electrum</w>
+        <w>ender</w>
+        <w>enderconstructor</w>
+        <w>enderio</w>
+        <w>energistics</w>
+        <w>extrautils</w>
+        <w>gregtech</w>
+        <w>gregtechproxy</w>
+        <w>hastener</w>
+        <w>immersive</w>
+        <w>immersiveengineering</w>
+        <w>lapis</w>
+        <w>lcodechicken</w>
+        <w>ljava</w>
+        <w>lnet</w>
+        <w>macerator</w>
+        <w>mekanism</w>
+        <w>metaitem</w>
+        <w>metalformer</w>
+        <w>minecraft</w>
+        <w>minecraftforge</w>
+        <w>minefactoryreloaded</w>
+        <w>oredict</w>
+        <w>peridot</w>
+        <w>powercrystals</w>
+        <w>pulverizer</w>
+        <w>qore</w>
+        <w>railcraft</w>
+        <w>rwtema</w>
+        <w>scrapbox</w>
+        <w>tconstruct</w>
+        <w>thaumcraft</w>
+        <w>thermalexpansion</w>
+        <w>tileentity</w>
+        <w>uniqore</w>
+      </words>
+    </dictionary>
+  </component>
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/UniQ.iml" filepath="$PROJECT_DIR$/UniQ.iml" />
+    </modules>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="false" project-jdk-name="1.8 openj9" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+  <component name="SvnBranchConfigurationManager">
+    <option name="mySupportsUserInfoFilter" value="true" />
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <UIState>
+          <splitter-proportions>
+            <SplitterProportionsDataImpl />
+          </splitter-proportions>
+          <settings />
+        </UIState>
+      </state>
+      <state key="Copyright.UI">
+        <UIState>
+          <splitter-proportions>
+            <SplitterProportionsDataImpl />
+          </splitter-proportions>
+        </UIState>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <UIState>
+          <splitter-proportions>
+            <SplitterProportionsDataImpl>
+              <option name="proportions">
+                <list>
+                  <option value="0.2" />
+                </list>
+              </option>
+            </SplitterProportionsDataImpl>
+          </splitter-proportions>
+          <last-edited>1.6</last-edited>
+        </UIState>
+      </state>
+      <state key="ScopeChooserConfigurable.UI">
+        <UIState>
+          <splitter-proportions>
+            <SplitterProportionsDataImpl />
+          </splitter-proportions>
+          <settings />
+        </UIState>
+      </state>
+    </states>
+  </component>
+</project>

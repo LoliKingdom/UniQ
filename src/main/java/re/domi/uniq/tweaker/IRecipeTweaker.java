@@ -3,9 +3,13 @@ package re.domi.uniq.tweaker;
 import net.minecraft.item.crafting.IRecipe;
 import re.domi.uniq.ResourceUnifier;
 
-public interface IRecipeTweaker extends IBaseTweaker
+public interface IRecipeTweaker
 {
-    void prepareTransform(String className) throws Exception;
+    String getName();
 
-    void transform(ResourceUnifier unifier, IRecipe recipe) throws Exception;
+    String getModId();
+
+    void prepareTransform(String className) throws ReflectiveOperationException;
+
+    void transform(ResourceUnifier unifier, IRecipe recipe) throws ReflectiveOperationException;
 }

@@ -17,26 +17,24 @@ public class MinecraftRecipeTweaker implements IRecipeTweaker
         this.obfFieldName = obfFieldName;
     }
 
-    @Override
     public String getName()
     {
         return "Minecraft crafting";
     }
 
-    @Override
     public String getModId()
     {
         return "";
     }
 
     @Override
-    public void prepareTransform(String className) throws Exception
+    public void prepareTransform(String className) throws ReflectiveOperationException
     {
         try
         {
             this.fRecipeOutput = Class.forName(className).getDeclaredField(this.obfFieldName);
         }
-        catch (Exception ex)
+        catch (NoSuchFieldException ex)
         {
             this.fRecipeOutput = Class.forName(className).getDeclaredField("recipeOutput");
         }
@@ -45,8 +43,8 @@ public class MinecraftRecipeTweaker implements IRecipeTweaker
     }
 
     @Override
-    public void transform(ResourceUnifier unifier, IRecipe recipe) throws Exception
+    public void transform(ResourceUnifier unifier, IRecipe recipe) throws ReflectiveOperationException
     {
-        unifier.setPreferredStack(this.fRecipeOutput, recipe);
+        unifier.setPreferredStack(fRecipeOutput, recipe);
     }
 }

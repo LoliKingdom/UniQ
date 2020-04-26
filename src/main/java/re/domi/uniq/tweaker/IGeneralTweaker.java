@@ -2,7 +2,11 @@ package re.domi.uniq.tweaker;
 
 import re.domi.uniq.ResourceUnifier;
 
-public interface IGeneralTweaker extends IBaseTweaker
+public interface IGeneralTweaker
 {
-    void run(ResourceUnifier unifier) throws Exception;
+    String getName();
+
+    String getModId();
+
+    void run(ResourceUnifier unifier) throws ReflectiveOperationException;
 }

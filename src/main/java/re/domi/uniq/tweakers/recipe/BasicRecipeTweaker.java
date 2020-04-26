@@ -10,13 +10,9 @@ public class BasicRecipeTweaker implements IRecipeTweaker
 {
     private Field fRecipeOutput;
 
-    private String modId = "";
+    private String modId;
     private String fieldName = "output";
     private String baseClass;
-
-    public BasicRecipeTweaker()
-    {
-    }
 
     public BasicRecipeTweaker(String modId)
     {
@@ -50,14 +46,14 @@ public class BasicRecipeTweaker implements IRecipeTweaker
     }
 
     @Override
-    public void prepareTransform(String className) throws Exception
+    public void prepareTransform(String className) throws ReflectiveOperationException
     {
         this.fRecipeOutput = Class.forName(this.baseClass == null ? className : this.baseClass).getDeclaredField(this.fieldName);
         this.fRecipeOutput.setAccessible(true);
     }
 
     @Override
-    public void transform(ResourceUnifier unifier, IRecipe recipe) throws Exception
+    public void transform(ResourceUnifier unifier, IRecipe recipe) throws ReflectiveOperationException
     {
         unifier.setPreferredStack(this.fRecipeOutput, recipe);
     }

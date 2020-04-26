@@ -1,13 +1,17 @@
 package re.domi.uniq.tweakers;
 
+import net.minecraft.item.ItemStack;
 import re.domi.uniq.ResourceUnifier;
 import re.domi.uniq.tweaker.IGeneralTweaker;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Map;
 
 public class ThermalExpansionTweaker implements IGeneralTweaker
 {
+    private static final String PACKAGE = "cofh.thermalexpansion.util.managers.";
+
     @Override
     public String getName()
     {
@@ -17,36 +21,52 @@ public class ThermalExpansionTweaker implements IGeneralTweaker
     @Override
     public String getModId()
     {
-        return "ThermalExpansion";
+        return "thermalexpansion";
     }
 
     @Override
-    public void run(ResourceUnifier unifier) throws Exception
+    public void run(ResourceUnifier unifier) throws ReflectiveOperationException
     {
-        this.processSingleOutputRecipes(unifier, "cofh.thermalexpansion.util.crafting.FurnaceManager", "$RecipeFurnace");
-        this.processDualOutputRecipes(unifier, "cofh.thermalexpansion.util.crafting.PulverizerManager", "$RecipePulverizer");
-        this.processDualOutputRecipes(unifier, "cofh.thermalexpansion.util.crafting.SmelterManager", "$RecipeSmelter");
-        this.processDualOutputRecipes(unifier, "cofh.thermalexpansion.util.crafting.SawmillManager", "$RecipeSawmill");
+        this.processMultiOutputRecipes(unifier, "Centrifuge", "recipeMap", "recipeMapMobs");
+        this.processSingleOutputRecipes(unifier, "machine", "Charger", "output", "recipeMap");
+        this.processSingleOutputRecipes(unifier, "machine", "Compactor", "output", "recipeMapAll", "recipeMapPlate", "recipeMapCoin", "recipeMapGear");
+        this.processSingleOutputRecipes(unifier, "machine", "Enchanter", "output", "recipeMap");
+        this.processSingleOutputRecipes(unifier, "machine", "Extruder", "output", "recipeMapIgneous", "recipeMapSedimentary");
+        this.processSingleOutputRecipes(unifier, "machine", "Furnace", "output", "recipeMap", "recipeMapPyrolysis");
+        this.processDualOutputRecipes(unifier, "Insolator");
+        this.processSingleOutputRecipes(unifier, "machine", "Precipitator", "output", "recipeMap");
+        this.processDualOutputRecipes(unifier, "Pulverizer");
+        this.processSingleOutputRecipes(unifier, "machine", "Refinery", "outputItem", "recipeMap");
+        this.processDualOutputRecipes(unifier, "Sawmill");
+        this.processDualOutputRecipes(unifier, "Smelter");
+        this.processSingleOutputRecipes(unifier, "machine", "Transposer", "output", "recipeMapFill", "recipeMapExtract");
+
+        this.processSingleOutputRecipes(unifier, "device", "Factorizer", "output", "recipeMap", "recipeMapReverse");
     }
 
-    @SuppressWarnings("SameParameterValue")
-    private void processSingleOutputRecipes(ResourceUnifier unifier, String baseName, String nestedName) throws Exception
+    private void processSingleOutputRecipes(ResourceUnifier unifier, String type, String machine, String outputName, String... recipeMapNames) throws ReflectiveOperationException
     {
-        Field fRecipeMap = Class.forName(baseName).getDeclaredField("recipeMap");
-        Field fOutput = Class.forName(baseName + nestedName).getDeclaredField("output");
+        String baseName = PACKAGE + type + "." + machine + "Manager";
+        Field fOutput = Class.forName(baseName + "$" + machine + "Recipe").getDeclaredField(outputName);
 
-        fRecipeMap.setAccessible(true);
         fOutput.setAccessible(true);
 
-        for (Map.Entry entry : ((Map<?, ?>) fRecipeMap.get(null)).entrySet())
+        for (String recipeMapName : recipeMapNames)
         {
-            unifier.setPreferredStack(fOutput, entry.getValue());
+            Field fRecipeMap = Class.forName(baseName).getDeclaredField(recipeMapName);
+            fRecipeMap.setAccessible(true);
+
+            for (Map.Entry entry : ((Map<?, ?>) fRecipeMap.get(null)).entrySet())
+            {
+                unifier.setPreferredStack(fOutput, entry.getValue());
+            }
         }
     }
 
-    private void processDualOutputRecipes(ResourceUnifier unifier, String baseName, String nestedName) throws Exception
+    private void processDualOutputRecipes(ResourceUnifier unifier, String machine) throws ReflectiveOperationException
     {
-        Class cNested = Class.forName(baseName + nestedName);
+        String baseName = PACKAGE + "machine." + machine + "Manager";
+        Class cNested = Class.forName(baseName + "$" + machine + "Recipe");
 
         Field fRecipeMap = Class.forName(baseName).getDeclaredField("recipeMap");
         Field fOutputPrimary = cNested.getDeclaredField("primaryOutput");
@@ -60,6 +80,26 @@ public class ThermalExpansionTweaker implements IGeneralTweaker
         {
             unifier.setPreferredStack(fOutputPrimary, entry.getValue());
             unifier.setPreferredStack(fOutputSecondary, entry.getValue());
+        }
+    }
+
+    @SuppressWarnings({"unchecked", "SameParameterValue"})
+    private void processMultiOutputRecipes(ResourceUnifier unifier, String machine, String... recipeMapNames) throws ReflectiveOperationException
+    {
+        String baseName = PACKAGE + "machine." + machine + "Manager";
+        Field fOutput = Class.forName(baseName + "$" + machine + "Recipe").getDeclaredField("output");
+        fOutput.setAccessible(true);
+
+        for (String recipeMapName : recipeMapNames)
+        {
+            Field fRecipeMap = Class.forName(baseName).getDeclaredField(recipeMapName);
+
+            fRecipeMap.setAccessible(true);
+
+            for (Map.Entry entry : ((Map<?, ?>) fRecipeMap.get(null)).entrySet())
+            {
+                unifier.setPreferredStacks((List<ItemStack>) fOutput.get(entry.getValue()));
+            }
         }
     }
 }

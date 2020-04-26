@@ -1,16 +1,22 @@
 package re.domi.uniq;
 
-import cpw.mods.fml.common.Loader;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraftforge.fml.common.Loader;
 import re.domi.uniq.tweaker.IRecipeTweaker;
 
 import java.util.*;
 
+@SuppressWarnings("WeakerAccess")
 public class RecipeProcessor
 {
     private HashMap<String, IRecipeTweaker> recipeTweakers = new HashMap<>();
+    private boolean printUnknownRecipeClasses;
 
-    @SuppressWarnings("WeakerAccess")
+    public RecipeProcessor(boolean printUnknownRecipeClasses)
+    {
+        this.printUnknownRecipeClasses = printUnknownRecipeClasses;
+    }
+
     public void registerRecipeTweaker(IRecipeTweaker tweaker, String recipeClassName)
     {
         String modId = tweaker.getModId();
@@ -33,17 +39,16 @@ public class RecipeProcessor
             {
                 entry.getValue().prepareTransform(entry.getKey());
             }
-            catch (Exception ex)
+            catch (ReflectiveOperationException ex)
             {
-                UniQ.instance.logger.error("Crafting tweaker " + entry.getValue().getName() + " threw an exception while preparing and was disabled:", ex);
+                UniQ.LOGGER.error("Crafting tweaker " + entry.getValue().getName() + " threw an exception while preparing and was disabled:", ex);
                 iterator.remove();
             }
         }
     }
 
-    public void transform(ResourceUnifier unifier, List<IRecipe> recipes)
+    public void transform(ResourceUnifier unifier, Iterable<IRecipe> recipes)
     {
-        @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
         Set<String> unknownRecipeClasses = new HashSet<>();
 
         for (IRecipe recipe : recipes)
@@ -56,14 +61,24 @@ public class RecipeProcessor
                 {
                     tweaker.transform(unifier, recipe);
                 }
-                catch (Exception ex)
+                catch (ReflectiveOperationException ex)
                 {
-                    UniQ.instance.logger.error("Crafting tweaker " + tweaker.getName() + " threw an exception while transforming:", ex);
+                    UniQ.LOGGER.error("Crafting tweaker " + tweaker.getName() + " threw an exception while transforming:", ex);
                 }
             }
             else
             {
                 unknownRecipeClasses.add(recipe.getClass().getName());
+            }
+        }
+
+        if (this.printUnknownRecipeClasses)
+        {
+            UniQ.LOGGER.info("=== Unknown recipe classes ===");
+
+            for (String recipeClass : unknownRecipeClasses)
+            {
+                UniQ.LOGGER.info(recipeClass);
             }
         }
     }

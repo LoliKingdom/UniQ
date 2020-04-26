@@ -7,7 +7,6 @@ import re.domi.uniq.tweaker.IGeneralTweaker;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Map;
 
 public class IndustrialCraftTweaker implements IGeneralTweaker
 {
@@ -20,46 +19,49 @@ public class IndustrialCraftTweaker implements IGeneralTweaker
     @Override
     public String getModId()
     {
-        return "IC2";
+        return "ic2";
     }
 
     @Override
-    public void run(ResourceUnifier unifier) throws Exception
+    public void run(ResourceUnifier unifier) throws ReflectiveOperationException
     {
         Class cRecipes = Class.forName("ic2.api.recipe.Recipes");
 
         Method mGetRecipes = Class.forName("ic2.api.recipe.IMachineRecipeManager").getDeclaredMethod("getRecipes");
-        Field fItems = Class.forName("ic2.api.recipe.RecipeOutput").getDeclaredField("items");
+        Field fOutput = Class.forName("ic2.api.recipe.MachineRecipe").getDeclaredField("output");
 
-        for (String machine : new String[] {"macerator", "extractor", "compressor", "centrifuge", "blockcutter", "blastfurance", "metalformerExtruding", "metalformerCutting", "metalformerRolling", "oreWashing"})
+        fOutput.setAccessible(true);
+
+        for (String machine : new String[] {"macerator", "extractor", "compressor", "centrifuge", "blockcutter", "blastfurnace", "metalformerExtruding", "metalformerCutting", "metalformerRolling", "oreWashing"})
         {
-            this.processMachineRecipeManager(unifier, machine, cRecipes, mGetRecipes, fItems);
+            this.processMachineRecipeManager(unifier, machine, cRecipes, mGetRecipes, fOutput);
         }
 
         this.processScrapBoxDrops(unifier, cRecipes);
     }
 
     @SuppressWarnings("unchecked")
-    private void processMachineRecipeManager(ResourceUnifier unifier, String machineName, Class cRecipes, Method mGetRecipes, Field fItems) throws Exception
+    private void processMachineRecipeManager(ResourceUnifier unifier, String machineName, Class cRecipes, Method mGetRecipes, Field fOutput) throws ReflectiveOperationException
     {
-        Map map = (Map) mGetRecipes.invoke(cRecipes.getDeclaredField(machineName).get(null));
+        Iterable<?> recipes = (Iterable<?>) mGetRecipes.invoke(cRecipes.getDeclaredField(machineName).get(null));
 
-        for (Object recipeOutput : map.values())
+        for (Object recipe : recipes)
         {
-            unifier.setPreferredStacks((List<ItemStack>) fItems.get(recipeOutput));
+            unifier.setPreferredStacks((List<ItemStack>) fOutput.get(recipe));
         }
     }
 
-    private void processScrapBoxDrops(ResourceUnifier unifier, Class cRecipes) throws Exception
+    private void processScrapBoxDrops(ResourceUnifier unifier, Class cRecipes) throws ReflectiveOperationException
     {
         Field fScrapboxDrops = cRecipes.getDeclaredField("scrapboxDrops");
-        Field fDrops = Class.forName("ic2.core.item.ItemScrapbox$ScrapboxRecipeManager").getDeclaredField("drops");
-        Field fItem = Class.forName("ic2.core.item.ItemScrapbox$Drop").getDeclaredField("item");
+
+        Field fDrops = Class.forName("ic2.core.recipe.ScrapboxRecipeManager").getDeclaredField("drops");
+        Field fItem = Class.forName("ic2.core.recipe.ScrapboxRecipeManager$Drop").getDeclaredField("item");
 
         fDrops.setAccessible(true);
         fItem.setAccessible(true);
 
-        List drops = (List) fDrops.get(fScrapboxDrops.get(fScrapboxDrops.get(null)));
+        List<?> drops = (List<?>) fDrops.get(fScrapboxDrops.get(null));
 
         for (Object drop : drops)
         {

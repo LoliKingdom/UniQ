@@ -1,30 +1,25 @@
 package re.domi.uniq;
 
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.oredict.OreDictionary;
-import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class ResourceUnifier
 {
-    private Logger logger;
     private HashMap<Integer, ItemStack> preferences = new HashMap<>();
     private HashMap<String, String> overrides = new HashMap<>();
     private HashSet<String> blacklist = new HashSet<>();
-    private NEIHelper neiHelper;
 
-    public ResourceUnifier(Logger logger)
-    {
-        this.logger = logger;
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public ResourceUnifier addOredictNames(String[] rules)
+    public void addOredictNames(String[] rules)
     {
         for (String rule : rules)
         {
@@ -32,20 +27,18 @@ public class ResourceUnifier
 
             if (ruleComponents.length < 3 || ruleComponents.length > 5)
             {
-                this.logger.error("Custom OreDict rule " + rule + " couldn't be parsed. Skipping.");
+                UniQ.LOGGER.error("Custom OreDict rule " + rule + " couldn't be parsed. Skipping.");
                 continue;
             }
 
-            if (Loader.isModLoaded(ruleComponents[1]) || "minecraft".equals(ruleComponents[1]))
+            if (Loader.isModLoaded(ruleComponents[1]) || ruleComponents[1].equals("minecraft"))
             {
                 int meta = 0;
-                String itemName = ruleComponents[1];
-
-                Item item = GameRegistry.findItem(itemName, ruleComponents[2]);
+                Item item = Item.REGISTRY.getObject(new ResourceLocation(ruleComponents[1], ruleComponents[2]));
 
                 if (item == null)
                 {
-                    this.logger.error("Item " + ruleComponents[1] + ":" + ruleComponents[2] + " wasn't found despite the mod being loaded!");
+                    UniQ.LOGGER.error("Item " + ruleComponents[1] + ":" + ruleComponents[2] + " wasn't found despite the mod being loaded!");
                     continue;
                 }
 
@@ -57,35 +50,30 @@ public class ResourceUnifier
                 OreDictionary.registerOre(ruleComponents[0], new ItemStack(item, 1, meta));
             }
         }
-
-        return this;
     }
 
-    public ResourceUnifier build(Config config)
+    public void prepareUnificationMaps(Config config)
     {
         Collections.addAll(blacklist, config.unificationBlacklist);
 
         HashMap<String, Integer> modPriorities = new HashMap<>();
-        String[] unificationPriorities = config.unificationPriorities;
 
-        this.neiHelper = new NEIHelper(config.enableNEIIntegration, this);
-
-        for (int i = 0; i < unificationPriorities.length; i++)
+        for (int i = 0; i < config.unificationPriorities.length; i++)
         {
-            modPriorities.put(unificationPriorities[i], i);
+            modPriorities.put(config.unificationPriorities[i], i);
         }
 
-        for (String line : config.unificationOverrides)
+        for (String override : config.unificationOverrides)
         {
-            int colonIndex = line.indexOf(":");
+            String[] overrideComponents = override.split(":");
 
-            if (colonIndex == -1)
+            if (overrideComponents.length != 2)
             {
-                this.logger.error("Format error in line " + line);
+                UniQ.LOGGER.error("Format error in line " + override);
                 continue;
             }
 
-            this.overrides.put(line.substring(0, colonIndex), line.substring(colonIndex + 1));
+            this.overrides.put(overrideComponents[0], overrideComponents[1]);
         }
 
         for (String prefix : config.unificationPrefixes)
@@ -100,15 +88,13 @@ public class ResourceUnifier
         {
             this.findBestItem(name, modPriorities);
         }
-
-        return this;
     }
 
     public ItemStack getPreferredStack(ItemStack stack)
     {
-        if (stack == null)
+        if (stack.isEmpty())
         {
-            return null;
+            return stack;
         }
 
         String identifier = getIdentifier(stack);
@@ -128,7 +114,7 @@ public class ResourceUnifier
             {
                 ItemStack copy = result.copy();
 
-                copy.stackSize = stack.stackSize;
+                copy.setCount(stack.getCount());
 
                 return copy;
             }
@@ -163,20 +149,21 @@ public class ResourceUnifier
         }
     }
 
-    public void setPreferredStacks(List<ItemStack> stacks)
+    public List<ItemStack> setPreferredStacks(List<ItemStack> stacks)
     {
-        if (stacks == null)
+        if (stacks != null)
         {
-            return;
+            for (int i = 0; i < stacks.size(); i++)
+            {
+                stacks.set(i, this.getPreferredStack(stacks.get(i)));
+            }
         }
 
-        for (int i = 0; i < stacks.size(); i++)
-        {
-            stacks.set(i, this.getPreferredStack(stacks.get(i)));
-        }
+        return stacks;
     }
 
-    public void setPreferredStack(Field field, Object instance) throws Exception
+    @SuppressWarnings("ConstantConditions")
+    public void setPreferredStack(Field field, Object instance) throws ReflectiveOperationException
     {
         ItemStack output = (ItemStack) field.get(instance);
         ItemStack replacement = this.getPreferredStack(output);
@@ -189,14 +176,14 @@ public class ResourceUnifier
 
     private void findBestItem(String name, HashMap<String, Integer> modPriorities)
     {
-        int oreId = OreDictionary.getOreID(name);
-
-        if (oreId < 0)
+        if (!OreDictionary.doesOreNameExist(name))
         {
             return;
         }
 
-        ArrayList<ItemStack> entries = OreDictionary.getOres(name);
+        int oreId = OreDictionary.getOreID(name);
+
+        List<ItemStack> entries = OreDictionary.getOres(name);
         String overrideModId = this.overrides.get(name);
 
         int bestPriority = Integer.MAX_VALUE;
@@ -214,44 +201,26 @@ public class ResourceUnifier
 
             if (priority < bestPriority)
             {
-                if (bestItemStack != null)
-                {
-                    String identifier = getIdentifier(bestItemStack);
-
-                    if (!blacklist.contains(identifier) && !blacklist.contains(String.format("%s:%s", identifier, bestItemStack.getItemDamage())))
-                    {
-                        this.neiHelper.tryHideItem(bestItemStack);
-                    }
-                }
-
                 bestItemStack = stack;
                 bestPriority = priority;
-            }
-            else
-            {
-                String identifier = getIdentifier(stack);
-
-                if (!blacklist.contains(identifier) && !blacklist.contains(String.format("%s:%s", identifier, stack.getItemDamage())))
-                {
-                    this.neiHelper.tryHideItem(stack);
-                }
             }
         }
 
         this.preferences.put(oreId, bestItemStack);
     }
 
+    @SuppressWarnings("ConstantConditions")
     private String getModId(ItemStack stack)
     {
-        String modId = GameRegistry.findUniqueIdentifierFor(stack.getItem()).modId;
+        String modId = Item.REGISTRY.getNameForObject(stack.getItem()).getResourceDomain();
 
         return modId.equals("") ? "minecraft" : modId;
     }
 
     private String getIdentifier(ItemStack stack)
     {
-        GameRegistry.UniqueIdentifier ident = GameRegistry.findUniqueIdentifierFor(stack.getItem());
+        ResourceLocation loc = Item.REGISTRY.getNameForObject(stack.getItem());
 
-        return ident == null ? null : ident.modId.equals("") ? "minecraft:" + ident.name : ident.toString();
+        return loc == null ? null : loc.getResourceDomain().equals("") ? "minecraft:" + loc.getResourcePath() : loc.toString();
     }
 }

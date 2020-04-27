@@ -2,14 +2,14 @@ package re.domi.uniq;
 
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.*;
-import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
-import re.domi.uniq.tweakers.IndustrialCraftTweaker;
-import re.domi.uniq.tweakers.MinecraftTweaker;
 import re.domi.uniq.tweaker.IGeneralTweaker;
 import re.domi.uniq.tweaker.IRecipeTweaker;
-import re.domi.uniq.tweakers.ThermalExpansionTweaker;
+import re.domi.uniq.tweakers.*;
 import re.domi.uniq.tweakers.recipe.BasicRecipeTweaker;
 import re.domi.uniq.tweakers.recipe.MinecraftRecipeTweaker;
 
@@ -39,13 +39,18 @@ public class UniQ
     {
         this.registerRecipeTweaker(new MinecraftRecipeTweaker("field_77575_e"), "net.minecraft.item.crafting.ShapedRecipes");
         this.registerRecipeTweaker(new MinecraftRecipeTweaker("field_77580_a"), "net.minecraft.item.crafting.ShapelessRecipes");
+        this.registerRecipeTweaker(new BasicRecipeTweaker(""), "net.minecraftforge.oredict.ShapedOreRecipe");
+        this.registerRecipeTweaker(new BasicRecipeTweaker(""), "net.minecraftforge.oredict.ShapelessOreRecipe");
 
         this.registerRecipeTweaker(new BasicRecipeTweaker("ic2"), "ic2.core.recipe.AdvRecipe");
         this.registerRecipeTweaker(new BasicRecipeTweaker("ic2"), "ic2.core.recipe.AdvShapelessRecipe");
 
+
         this.registerTweaker(new MinecraftTweaker(this.recipeProcessor));
         this.registerTweaker(new ThermalExpansionTweaker());
         this.registerTweaker(new IndustrialCraftTweaker());
+        this.registerTweaker(new NuclearCraftTweaker());
+        this.registerTweaker(new ImmersiveEngineeringTweaker());
     }
 
     @EventHandler

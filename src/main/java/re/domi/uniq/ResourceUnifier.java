@@ -90,9 +90,24 @@ public class ResourceUnifier
         }
     }
 
+    public ItemStack getPreferredStack(String name)
+    {
+        if (name != null && OreDictionary.doesOreNameExist(name))
+        {
+            ItemStack result = this.preferences.get(OreDictionary.getOreID(name));
+
+            if (result != null)
+            {
+                return result.copy();
+            }
+        }
+
+        return ItemStack.EMPTY;
+    }
+
     public ItemStack getPreferredStack(ItemStack stack)
     {
-        if (stack.isEmpty())
+        if (stack == null || stack.isEmpty())
         {
             return stack;
         }
@@ -206,7 +221,10 @@ public class ResourceUnifier
             }
         }
 
-        this.preferences.put(oreId, bestItemStack);
+        if (bestItemStack != null)
+        {
+            this.preferences.put(oreId, bestItemStack);
+        }
     }
 
     @SuppressWarnings("ConstantConditions")

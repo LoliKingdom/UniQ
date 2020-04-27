@@ -64,23 +64,32 @@ public class Config
                             "Brass",
                             "Bronze",
                             "CertusQuartz",
+                            "Coal",
                             "Cobalt",
+                            "Constantan",
                             "Copper",
+                            "Diamond",
                             "Electrum",
+                            "Emerald",
                             "Gold",
                             "Invar",
+                            "Iridium",
                             "Iron",
+                            "Lapis",
                             "Lead",
                             "Lithium",
-                            "NetherQuartz",
+                            "Mithril",
                             "Nickel",
                             "Osmium",
                             "Peridot",
                             "Platinum",
+                            "Quartz",
+                            "Redstone",
                             "Ruby",
                             "Sapphire",
                             "Silver",
                             "Steel",
+                            "Thorium",
                             "Tin",
                             "Uranium"
                     };
@@ -109,9 +118,6 @@ public class Config
                             "blockFuelCoke",
                             "blockPlastic",
                             "dustCharcoal",
-                            "dustCoal",
-                            "dustDiamond",
-                            "dustLapis",
                             "dustObsidian",
                             "dustPlastic",
                             "dustSalt",
@@ -131,11 +137,12 @@ public class Config
                     {
                             "minecraft",
                             "thermalfoundation",
+                            "immersiveengineering",
+                            "ic2",
+
                             "Mekanism",
-                            "ImmersiveEngineering",
                             "TConstruct",
                             "appliedenergistics2",
-                            "ic2",
                     };
         }
 
@@ -152,7 +159,7 @@ public class Config
             return new String[]
                     {
                             "TConstruct:GravelOre",
-                            "IC2:itemPartIndustrialDiamond:0"
+                            "ic2:crafting:19"
                     };
         }
 
@@ -160,14 +167,6 @@ public class Config
         {
             return new String[]
                     {
-                            "dustNetherQuartz:NuclearCraft:material:13",
-
-                            "dustNetherQuartz:ImmersiveEngineering:metal:18",
-                            "ingotAluminium:ImmersiveEngineering:metal:1",
-                            "dustAluminium:ImmersiveEngineering:metal:11",
-                            "nuggetAluminium:ImmersiveEngineering:metal:23",
-                            "plateAluminium:ImmersiveEngineering:metal:32",
-                            "stickAluminium:ImmersiveEngineering:material:16"
                     };
         }
 

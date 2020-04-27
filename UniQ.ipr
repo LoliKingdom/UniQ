@@ -168,21 +168,40 @@
       </item>
     </group>
   </component>
+  <component name="ProjectCodeStyleConfiguration">
+    <option name="PREFERRED_PROJECT_CODE_STYLE" value="Default" />
+  </component>
   <component name="ProjectDictionaryState">
     <dictionary name="Domi">
       <words>
         <w>blastfurnace</w>
         <w>blockcutter</w>
+        <w>blusunrize</w>
+        <w>certus</w>
         <w>cofh</w>
+        <w>constantan</w>
+        <w>crystallizer</w>
+        <w>electrum</w>
         <w>extruder</w>
         <w>factorizer</w>
+        <w>hastener</w>
+        <w>immersive</w>
+        <w>immersiveengineering</w>
         <w>insolator</w>
+        <w>lapis</w>
         <w>macerator</w>
+        <w>manufactory</w>
         <w>metalformer</w>
         <w>minecraft</w>
+        <w>minecraftforge</w>
+        <w>mithril</w>
+        <w>multiblock</w>
+        <w>nuclearcraft</w>
         <w>oredict</w>
+        <w>peridot</w>
         <w>precipitator</w>
         <w>pulverizer</w>
+        <w>redstone</w>
         <w>scrapbox</w>
         <w>thermalexpansion</w>
         <w>thermalfoundation</w>

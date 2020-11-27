@@ -2,13 +2,12 @@
 {
   "modid": "uniq",
   "name": "UniQ",
-  "description": "OreDict unifier",
+  "description": "Unifier.",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "https://github.com/FakeDomi/UniQ",
+  "url": "",
   "updateUrl": "",
-  "authorList": ["Domi"],
-  "credits": "",
+  "authorList": ["Domi", "Rongmario"],
   "logoFile": "",
   "screenshots": [],
   "dependencies": []

@@ -1,100 +1,69 @@
 package re.domi.uniq;
 
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import org.apache.logging.log4j.Logger;
-import re.domi.uniq.tweaker.IGeneralTweaker;
-import re.domi.uniq.tweaker.IRecipeTweaker;
-import re.domi.uniq.tweakers.*;
-import re.domi.uniq.tweakers.recipe.BasicRecipeTweaker;
-import re.domi.uniq.tweakers.recipe.MinecraftRecipeTweaker;
+import re.domi.uniq.fluids.FluidsHandler;
 
-import java.util.ArrayList;
+@Mod(modid = UniQ.MOD_ID, name = UniQ.NAME, version = "2.0a")
+public class UniQ {
 
-@SuppressWarnings({"WeakerAccess", "unused"})
-@Mod(modid = "uniq", dependencies = "before:jei")
-public class UniQ
-{
-    public static Logger LOGGER;
+    public static final String MOD_ID = "uniq";
+    public static final String NAME = "UniQ";
 
-    private Config config;
+    @Mod.Instance
+    public static UniQ INSTANCE;
+    public static ModContainer CONTAINER;
 
-    private RecipeProcessor recipeProcessor;
-    private ArrayList<IGeneralTweaker> tweakers = new ArrayList<>();
-
-    @EventHandler
-    public void preInit(FMLPreInitializationEvent event)
     {
-        LOGGER = event.getModLog();
-        this.config = new Config(event.getSuggestedConfigurationFile()).load();
-        this.recipeProcessor = new RecipeProcessor(this.config.printUnknownRecipeClasses);
+        INSTANCE = this;
+        CONTAINER = Loader.instance().activeModContainer();
     }
 
-    @EventHandler
-    public void init(FMLInitializationEvent event)
-    {
-        this.registerRecipeTweaker(new MinecraftRecipeTweaker("field_77575_e"), "net.minecraft.item.crafting.ShapedRecipes");
-        this.registerRecipeTweaker(new MinecraftRecipeTweaker("field_77580_a"), "net.minecraft.item.crafting.ShapelessRecipes");
-        this.registerRecipeTweaker(new BasicRecipeTweaker(""), "net.minecraftforge.oredict.ShapedOreRecipe");
-        this.registerRecipeTweaker(new BasicRecipeTweaker(""), "net.minecraftforge.oredict.ShapelessOreRecipe");
-
-        this.registerRecipeTweaker(new BasicRecipeTweaker("ic2"), "ic2.core.recipe.AdvRecipe");
-        this.registerRecipeTweaker(new BasicRecipeTweaker("ic2"), "ic2.core.recipe.AdvShapelessRecipe");
-
-
-        this.registerTweaker(new MinecraftTweaker(this.recipeProcessor));
-        this.registerTweaker(new ThermalExpansionTweaker());
-        this.registerTweaker(new IndustrialCraftTweaker());
-        this.registerTweaker(new NuclearCraftTweaker());
-        this.registerTweaker(new ImmersiveEngineeringTweaker());
-    }
-
-    @EventHandler
-    public void loadComplete(FMLLoadCompleteEvent event)
-    {
-        ResourceUnifier unifier = new ResourceUnifier();
-
-        LOGGER.info("Registering custom OreDict entries...");
-        unifier.addOredictNames(this.config.customOreDictNames);
-
-        LOGGER.info("Preparing unification maps...");
-        unifier.prepareUnificationMaps(this.config);
-
-        LOGGER.info("Setting up recipe tweakers...");
-        this.recipeProcessor.setup();
-
-        LOGGER.info("Running tweakers...");
-        for (IGeneralTweaker tweaker : this.tweakers)
-        {
-            try
-            {
-                tweaker.run(unifier);
-            }
-            catch (ReflectiveOperationException ex)
-            {
-                LOGGER.error("Tweaker " + tweaker.getName() + " threw an exception while running:", ex);
+    // TODO: Have to run configs earlier to support Mekanism and its stupid ways
+    @Mod.EventHandler
+    public void construction(FMLConstructionEvent event) {
+        if (UniQConfig.FLUIDS.fluidPriorities.length > 0) {
+            for (final String string : UniQConfig.FLUIDS.fluidPriorities) {
+                FluidsHandler.prioritize(string);
             }
         }
-
-        LOGGER.info("Done.");
-    }
-
-    public void registerRecipeTweaker(IRecipeTweaker craftingTweaker, String recipeClassName)
-    {
-        this.recipeProcessor.registerRecipeTweaker(craftingTweaker, recipeClassName);
-    }
-
-    public void registerTweaker(IGeneralTweaker tweaker)
-    {
-        String modId = tweaker.getModId();
-
-        if (modId.equals("") || Loader.isModLoaded(modId))
-        {
-            this.tweakers.add(tweaker);
+        if (UniQConfig.FLUIDS.equivalentFluids.length > 0) {
+            for (final String string : UniQConfig.FLUIDS.equivalentFluids) {
+                FluidsHandler.unify(string);
+            }
         }
     }
+
+    @Mod.EventHandler
+    public void loadComplete(FMLLoadCompleteEvent event) {
+        if (UniQConfig.FLUIDS.fluidColourCustomizations.length > 0) {
+            UniQLogger.LOGGER.info("Setting custom fluid colours...");
+            for (final String id : UniQConfig.FLUIDS.fluidColourCustomizations) {
+                int arrowIndex = id.indexOf("<->");
+                if (arrowIndex == -1) {
+                    throw new IllegalArgumentException(id + ": is not valid! Check config comment for formatting tips!");
+                }
+                String fluidString = id.substring(0, arrowIndex);
+                UniQLogger.LOGGER.info(fluidString);
+                Fluid fluid;
+                if ((fluid = FluidRegistry.getFluid(fluidString)) == null) {
+                    throw new IllegalArgumentException(fluidString + ": doesn't exist in the Fluids Registry!");
+                }
+                String colour = id.substring(arrowIndex + 3);
+                try {
+                    int intColour = colour.startsWith("0x") ? Long.decode(colour).intValue() : (int) Long.parseLong(colour);
+                    fluid.setColor(intColour);
+                } catch (NumberFormatException e) {
+                    throw new IllegalArgumentException(colour + " of " + fluidString + " is not a valid colour!");
+                }
+            }
+            UniQLogger.LOGGER.info("Finished setting custom fluid colours...");
+        }
+    }
+
 }

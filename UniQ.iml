@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module relativePaths="true" type="JAVA_MODULE" version="4">
-  <component name="ExternalSystem" externalSystem="GRADLE" externalSystemModuleGroup="re.domi" externalSystemModuleVersion="2.0a" linkedProjectId="UniQ" linkedProjectPath="$MODULE_DIR$" rootProjectPath="$MODULE_DIR$" />
+  <component name="ExternalSystem" externalSystem="GRADLE" externalSystemModuleGroup="re.domi" externalSystemModuleVersion="2.1" linkedProjectId="UniQ" linkedProjectPath="$MODULE_DIR$" rootProjectPath="$MODULE_DIR$" />
   <component name="FacetManager">
     <facet type="minecraft" name="Minecraft">
       <configuration>

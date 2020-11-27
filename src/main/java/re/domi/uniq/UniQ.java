@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import re.domi.uniq.fluids.FluidsHandler;
 
-@Mod(modid = UniQ.MOD_ID, name = UniQ.NAME, version = "2.0a")
+@Mod(modid = UniQ.MOD_ID, name = UniQ.NAME, version = "2.1")
 public class UniQ {
 
     public static final String MOD_ID = "uniq";

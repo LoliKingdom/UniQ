@@ -6,7 +6,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import re.domi.uniq.fluids.FluidsHandler;
 
-@Deprecated
 @Mixin(Fluid.class)
 public class FluidMixin {
 

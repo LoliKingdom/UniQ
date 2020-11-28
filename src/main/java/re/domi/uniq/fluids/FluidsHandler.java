@@ -32,7 +32,6 @@ public class FluidsHandler {
     }
 
     public static void unify(String string) {
-        UniQLogger.LOGGER.info("Processing {}", string);
         String[] split = string.split("<->");
         if (split.length != 2) {
             throw new IllegalArgumentException(string + ": is not valid! Check config comment for formatting tips!");
